@@ -1,5 +1,6 @@
 import org.w3c.dom.Node;
 
+import java.util.ArrayList;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -86,9 +87,7 @@ abstract class List<E> {
      */
     abstract List<List<E>> powerSet ();
 
-    List<E> reverse () {
-        return reverseHelper(new EmptyL<>());
-    }
+    List<E> reverse () { return this.reverseHelper(new EmptyL<>()); }
 }
 
 //-------------------------------------------------------------
@@ -96,12 +95,12 @@ abstract class List<E> {
 class EmptyL<E> extends List<E> {
 
     int length() {
-        return 0; // TODO
+        return 0;
     }
 
     boolean inList(E elem) {
-        return false; // TODO
-    }
+        return this.equals(elem);
+    } // TODO
 
     List<E> insertAfter(E elem, E newElem) { return this; }
 
@@ -113,20 +112,14 @@ class EmptyL<E> extends List<E> {
 
     <F> List<F> map(Function<E, F> f) { return new EmptyL<>(); }
 
-    <F> F reduce(F base, BiFunction<E, F, F> f) {
-        return null; // TODO
-    }
+    <F> F reduce(F base, BiFunction<E, F, F> f) { return base; }
 
-    List<E> append(List<E> other) {
-        return null; // TODO
-    }
+    List<E> append(List<E> other) { return other; }
 
-    List<E> reverseHelper(List<E> result) {
-        return null; // TODO
-    }
+    List<E> reverseHelper(List<E> result) { return result; }
 
     List<List<E>> powerSet() {
-        return null; // TODO
+        return new EmptyL<>();
     }
 
     public boolean equals (Object o) {
@@ -142,6 +135,7 @@ class EmptyL<E> extends List<E> {
 //-------------------------------------------------------------
 
 class NodeL<E> extends List<E> {
+
     private final E first;
     private final List<E> rest;
 
@@ -150,15 +144,12 @@ class NodeL<E> extends List<E> {
         this.rest = rest;
     }
 
-    int length() {
-        return 0; // TODO
-    }
+    int length() { return 1 + this.rest.length(); }
 
-    boolean inList(E elem) {
-        return false; // TODO
-    }
+    boolean inList(E elem) { return this.equals(elem) || this.rest.inList(elem); } // TODO
 
     List<E> insertAfter(E elem, E newElem) {
+
         if (this.first == elem) {
             return new NodeL<>(this.first, new NodeL<>(newElem, this.rest.insertAfter(elem,
                     newElem)));
@@ -169,6 +160,7 @@ class NodeL<E> extends List<E> {
     }
 
     List<E> removeFirst(E elem) {
+
         if (this.first == elem) {
             return this.rest;
         }
@@ -178,6 +170,7 @@ class NodeL<E> extends List<E> {
     }
 
     int indexOf(E elem) throws EmptyListE {
+
         if (this.first == elem) {
             return 0;
         }
@@ -187,6 +180,7 @@ class NodeL<E> extends List<E> {
     }
 
     List<E> filter(Function<E, Boolean> pred) {
+
         if (pred.apply(this.first)) {
             return new NodeL<>(this.first, this.rest.filter(pred));
         }
@@ -196,23 +190,31 @@ class NodeL<E> extends List<E> {
     }
 
     <F> List<F> map(Function<E, F> f) {
-        return new NodeL<>(f.apply(this.first), this.rest.map(f)); // TODO
+
+        return new NodeL<>(f.apply(this.first), this.rest.map(f));
     }
 
     <F> F reduce(F base, BiFunction<E, F, F> f) {
+//        F res = base;
+//
+//        res = f.apply(this.first, res);
+//        res += this.rest.reduce(base, f);
+
         return null; // TODO
     }
 
-    List<E> append(List<E> other) {
-        return null; // TODO
-    }
+    List<E> append(List<E> other) { return new NodeL<>(this.first, this.rest.append(other)); }
 
-    List<E> reverseHelper(List<E> result) {
-        return null; // TODO
-    }
+    List<E> reverseHelper(List<E> result) { return this.rest.reverseHelper(new NodeL<>(this.first
+            , result)); }
 
     List<List<E>> powerSet() {
-        return null; // TODO
+
+        List<List<E>> res = new ArrayList<NodeL<E>>(new NodeL<>(this.first, this.rest));
+
+        // then break down the list and add each element to the current powerset
+
+        return res; // TODO
     }
 
     public boolean equals (Object o) {
