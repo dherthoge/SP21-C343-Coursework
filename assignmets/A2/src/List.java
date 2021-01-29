@@ -1,3 +1,5 @@
+import org.w3c.dom.Node;
+
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -101,25 +103,15 @@ class EmptyL<E> extends List<E> {
         return false; // TODO
     }
 
-    List<E> insertAfter(E elem, E newElem) {
-        return null; // TODO
-    }
+    List<E> insertAfter(E elem, E newElem) { return this; }
 
-    List<E> removeFirst(E elem) {
-        return null; // TODO
-    }
+    List<E> removeFirst(E elem) { return this; }
 
-    int indexOf(E elem) throws EmptyListE {
-        return 0; // TODO
-    }
+    int indexOf(E elem) throws EmptyListE { throw new EmptyListE(); }
 
-    List<E> filter(Function<E, Boolean> pred) {
-        return null; // TODO
-    }
+    List<E> filter(Function<E, Boolean> pred) { return this; }
 
-    <F> List<F> map(Function<E, F> f) {
-        return null; // TODO
-    }
+    <F> List<F> map(Function<E, F> f) { return new EmptyL<>(); }
 
     <F> F reduce(F base, BiFunction<E, F, F> f) {
         return null; // TODO
@@ -139,6 +131,11 @@ class EmptyL<E> extends List<E> {
 
     public boolean equals (Object o) {
         return o instanceof EmptyL;
+    }
+
+    @Override
+    public String toString() {
+        return "";
     }
 }
 
@@ -162,23 +159,44 @@ class NodeL<E> extends List<E> {
     }
 
     List<E> insertAfter(E elem, E newElem) {
-        return null; // TODO
+        if (this.first == elem) {
+            return new NodeL<>(this.first, new NodeL<>(newElem, this.rest.insertAfter(elem,
+                    newElem)));
+        }
+        else {
+            return new NodeL<>(this.first, this.rest.insertAfter(elem, newElem));
+        }
     }
 
     List<E> removeFirst(E elem) {
-        return null; // TODO
+        if (this.first == elem) {
+            return this.rest;
+        }
+        else {
+            return new NodeL<>(this.first, this.rest.removeFirst(elem));
+        }
     }
 
     int indexOf(E elem) throws EmptyListE {
-        return 0; // TODO
+        if (this.first == elem) {
+            return 0;
+        }
+        else {
+            return 1 + this.rest.indexOf(elem);
+        }
     }
 
     List<E> filter(Function<E, Boolean> pred) {
-        return null; // TODO
+        if (pred.apply(this.first)) {
+            return new NodeL<>(this.first, this.rest.filter(pred));
+        }
+        else {
+            return this.rest.filter(pred);
+        }
     }
 
     <F> List<F> map(Function<E, F> f) {
-        return null; // TODO
+        return new NodeL<>(f.apply(this.first), this.rest.map(f)); // TODO
     }
 
     <F> F reduce(F base, BiFunction<E, F, F> f) {
@@ -203,6 +221,11 @@ class NodeL<E> extends List<E> {
             return first.equals(other.first) && rest.equals(other.rest);
         }
         else return false;
+    }
+
+    @Override
+    public String toString() {
+        return "" + first + ", " + rest.toString();
     }
 }
 
