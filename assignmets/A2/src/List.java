@@ -31,7 +31,9 @@ abstract class List<E> {
      * Checks if the given elem occurs in the list
      * (Use .equals() to check for equality)
      */
-    abstract boolean inList(E elem);
+     boolean inList(E elem) {
+         return this.reduce(false, (a, e) -> a.equals(elem) || e);
+     };
 
     /**
      * Inserts newElem after every occurrence of elem
@@ -98,10 +100,6 @@ class EmptyL<E> extends List<E> {
         return 0;
     }
 
-    boolean inList(E elem) {
-        return this.equals(elem);
-    } // TODO
-
     List<E> insertAfter(E elem, E newElem) { return this; }
 
     List<E> removeFirst(E elem) { return this; }
@@ -119,16 +117,15 @@ class EmptyL<E> extends List<E> {
     List<E> reverseHelper(List<E> result) { return result; }
 
     List<List<E>> powerSet() {
-        return new EmptyL<>();
+        return new NodeL<>(new EmptyL<>(), new EmptyL<>());
     }
 
     public boolean equals (Object o) {
         return o instanceof EmptyL;
     }
 
-    @Override
     public String toString() {
-        return "";
+        return "e";
     }
 }
 
@@ -145,8 +142,6 @@ class NodeL<E> extends List<E> {
     }
 
     int length() { return 1 + this.rest.length(); }
-
-    boolean inList(E elem) { return this.equals(elem) || this.rest.inList(elem); } // TODO
 
     List<E> insertAfter(E elem, E newElem) {
 
@@ -195,12 +190,8 @@ class NodeL<E> extends List<E> {
     }
 
     <F> F reduce(F base, BiFunction<E, F, F> f) {
-//        F res = base;
-//
-//        res = f.apply(this.first, res);
-//        res += this.rest.reduce(base, f);
 
-        return null; // TODO
+        return this.rest.reduce(f.apply(this.first, base), f);
     }
 
     List<E> append(List<E> other) { return new NodeL<>(this.first, this.rest.append(other)); }
@@ -210,11 +201,11 @@ class NodeL<E> extends List<E> {
 
     List<List<E>> powerSet() {
 
-        List<List<E>> res = new ArrayList<NodeL<E>>(new NodeL<>(this.first, this.rest));
+        return new NodeL<>(new NodeL<>(this.first, this.rest),
+                new NodeL<>(new NodeL<>(this.first, new EmptyL<>()),
+                    this.rest.powerSet()));
 
-        // then break down the list and add each element to the current powerset
-
-        return res; // TODO
+        //return null; // TODO
     }
 
     public boolean equals (Object o) {
@@ -225,10 +216,7 @@ class NodeL<E> extends List<E> {
         else return false;
     }
 
-    @Override
-    public String toString() {
-        return "" + first + ", " + rest.toString();
-    }
+    public String toString() { return first + ", " + rest.toString(); }
 }
 
 //-------------------------------------------------------------
