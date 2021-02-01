@@ -191,7 +191,7 @@ class NodeL<E> extends List<E> {
 
     <F> F reduce(F base, BiFunction<E, F, F> f) {
 
-        return this.rest.reduce(f.apply(this.first, base), f);
+        return f.apply(this.first, this.rest.reduce(base, f));
     }
 
     List<E> append(List<E> other) { return new NodeL<>(this.first, this.rest.append(other)); }

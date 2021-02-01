@@ -1,5 +1,4 @@
 import org.junit.jupiter.api.Test;
-import org.junit.platform.engine.support.hierarchical.Node;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -66,6 +65,20 @@ class ListTest {
                                                     new NodeL<>(5,
                                                             new EmptyL<>()))))));
 
+    List<String> Hello =
+            new NodeL<>("H",
+                    new NodeL<>("e",
+                            new NodeL<>("l",
+                                    new NodeL<>("l",
+                                            new NodeL<>("o",
+                                                    new NodeL<>("!",
+                                                            new EmptyL<>()))))));
+
+    List<String> Hi =
+            new NodeL<>("H",
+                    new NodeL<>("i",
+                            new EmptyL<>()));
+
     @Test
     void lists() throws EmptyListE {
 
@@ -76,19 +89,6 @@ class ListTest {
         assertEquals(ints, ints100.removeFirst(100));
 
         assertEquals(3, ints.indexOf(2));
-
-
-
-
-//        System.out.println(new NodeL<>(new NodeL<>(2, new NodeL<>(1, new EmptyL<>())),
-//                new NodeL<>(new NodeL<>(2, new EmptyL<>()),
-//                        new NodeL<>(new NodeL<>(1, new EmptyL<>()),
-//                                new NodeL<>(new EmptyL<>(), new EmptyL<>())))));
-
-//        new NodeL<>(new NodeL<>(2, new NodeL<>(1, new EmptyL<>())),
-//                new NodeL<>(new NodeL<>(2, new EmptyL<>()),
-//                        new NodeL<>(new NodeL<>(1, new EmptyL<>()),
-//                                new NodeL<>(new EmptyL<>(), new EmptyL<>()))));
 
 
 
@@ -105,9 +105,19 @@ class ListTest {
 
         assertEquals(intsRev, ints.reverse());
 
-        //List<List<Integer>> evensPS = intsEvens.powerSet();
-        //System.out.print(evensPS);
 
+//        System.out.println(new NodeL<>(new NodeL<>(2, new NodeL<>(1, new EmptyL<>())),
+//                new NodeL<>(new NodeL<>(2, new EmptyL<>()),
+//                        new NodeL<>(new NodeL<>(1, new EmptyL<>()),
+//                                new NodeL<>(new EmptyL<>(), new EmptyL<>())))));
+
+//        new NodeL<>(new NodeL<>(2, new NodeL<>(1, new EmptyL<>())),
+//                new NodeL<>(new NodeL<>(2, new EmptyL<>()),
+//                        new NodeL<>(new NodeL<>(1, new EmptyL<>()),
+//                                new NodeL<>(new EmptyL<>(), new EmptyL<>()))));
+
+//        List<List<Integer>> evensPS = intsEvens.powerSet();
+//
 //        assertEquals(8, evensPS.length());
 //        assertTrue(evensPS.inList(new EmptyL<>()));
 //        assertTrue(evensPS.inList(new NodeL<>(0, new EmptyL<>())));
@@ -121,6 +131,127 @@ class ListTest {
 
     @Test
     void lengthTests() throws EmptyListE {
+
         assertEquals(0, ints0.length());
+        assertEquals(6, Hello.length());
+    }
+
+    @Test
+    void inListTests() throws EmptyListE {
+
+        assertTrue(ints100.inList(100));
+        assertTrue(Hello.inList("!"));
+        assertFalse(intsEvensOdds.inList(15));
+        assertFalse(Hello.inList("p"));
+    }
+
+    @Test
+    void insertAfterTests() throws EmptyListE {
+
+        assertEquals(
+                new NodeL<>("H",
+                        new NodeL<>("e",
+                                new NodeL<>("l",
+                                        new NodeL<>(" ",
+                                                new NodeL<>("l",
+                                                        new NodeL<>(" ",
+                                                                new NodeL<>("o",
+                                                                        new NodeL<>("!",
+                                                                                new EmptyL<>())))))))),
+                Hello.insertAfter("l", " "));
+        assertEquals(
+                new NodeL<>("H",
+                        new NodeL<>("e",
+                                new NodeL<>("l",
+                                        new NodeL<>("l",
+                                                new NodeL<>("o",
+                                                        new NodeL<>("!",
+                                                                        new EmptyL<>())))))),
+                Hello.insertAfter("W", " "));
+    }
+
+    @Test
+    void removeFirstTests() throws EmptyListE {
+
+        assertEquals(
+                new NodeL<>("H",
+                        new NodeL<>("e",
+                                new NodeL<>("l",
+                                        new NodeL<>("l",
+                                                new NodeL<>("o",
+                                                        new NodeL<>("!",
+                                                                new EmptyL<>())))))),
+        Hello.removeFirst(" "));
+        assertEquals(
+                new NodeL<>("H",
+                        new NodeL<>("e",
+                                new NodeL<>("l",
+                                        new NodeL<>("o",
+                                                new NodeL<>("!",
+                                                        new EmptyL<>()))))),
+                Hello.removeFirst("l"));
+        assertEquals(
+                new NodeL<>(4,
+                        new NodeL<>(3,
+                                new NodeL<>(2,
+                                        new NodeL<>(1,
+                                                new NodeL<>(0,
+                                                        new EmptyL<>()))))),
+                ints.removeFirst(5));
+    }
+
+    @Test
+    void indexOfTests() throws EmptyListE {
+
+        // TODO
+    }
+
+    @Test
+    void filterTests() throws EmptyListE {
+
+        // TODO
+    }
+
+    @Test
+    void mapTests() throws EmptyListE {
+
+        // TODO
+    }
+
+    @Test
+    void reduceTests() throws EmptyListE {
+
+        assertEquals("Hello!", Hello.reduce("", String::concat ));
+        assertEquals(0, intsRev.reduce(1, (n, a) -> n*a));
+        assertEquals(1, intsOdds.reduce(1, (n, a) -> n/a));
+        assertEquals(25, intsOdds.reduce(1, (n, a) -> n*n));
+    }
+
+    @Test
+    void appendTests() throws EmptyListE {
+
+        // TODO
+    }
+
+    @Test
+    void powerSetTests() throws EmptyListE {
+
+//        List<List<String>> HiPS = Hi.powerSet();
+//        List<List<String>> HelloPS = Hello.powerSet();
+//
+//
+//        assertEquals(64, HelloPS.powerSet().length());
+//
+//        assertEquals(4, HiPS.powerSet().length());
+//        assertTrue(HiPS.inList(new EmptyL<String>()));
+//        assertTrue(HiPS.inList(new NodeL<>("H", new EmptyL<>())));
+//        assertTrue(HiPS.inList(new NodeL<>("i", new EmptyL<>())));
+//        assertTrue(HiPS.inList(new NodeL<>("H", new NodeL<>("I", new EmptyL<>()))));
+    }
+
+    @Test
+    void reverseTests() throws EmptyListE {
+
+        // TODO
     }
 }
