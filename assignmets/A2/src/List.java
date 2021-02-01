@@ -125,7 +125,7 @@ class EmptyL<E> extends List<E> {
     }
 
     public String toString() {
-        return "e";
+        return "end";
     }
 }
 
@@ -201,11 +201,12 @@ class NodeL<E> extends List<E> {
 
     List<List<E>> powerSet() {
 
-        return new NodeL<>(new NodeL<>(this.first, this.rest),
-                new NodeL<>(new NodeL<>(this.first, new EmptyL<>()),
-                    this.rest.powerSet()));
+        List<List<E>> restPS = this.rest.powerSet(); // Recursively solve the powerset without
+        // the current this.first
+        List<List<E>> firstPS = restPS.map((ps) -> new NodeL(this.first, ps)); // Add the first
+        // to the members of the rest
 
-        //return null; // TODO
+        return firstPS.append(restPS); // append the two powersets
     }
 
     public boolean equals (Object o) {
