@@ -176,13 +176,12 @@ class DequeueArrayDouble<E> extends DequeueArray<E> {
             } catch (NoSuchElementE noSuchElementE) {}
         }
 
-
         // Update elements trackers after resize (size stays the same)
         this.elements = newElements;
         this.capacity = this.getCapacity() * 2;
         this.front = this.capacity - 1;
         this.size = numElemToTrans;
-        this.back = this.size() - 1;
+        this.back = this.size();
     }
 }
 
