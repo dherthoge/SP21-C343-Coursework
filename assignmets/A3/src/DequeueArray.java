@@ -50,6 +50,16 @@ public abstract class DequeueArray<E> {
     // --- real work begins --- //
 
     /**
+      * Modulates the pointers so they never lay
+      * outside of the bounds of the dequeue.
+      */
+    private void modPointers() {
+
+        this.front = this.front % this.capacity;
+        this.back = this.back % this.capacity;
+    }
+
+    /**
      * Adds the given elem to the front of the dequeue
      * If there is no room, grow the dequeue first
      */
@@ -62,6 +72,8 @@ public abstract class DequeueArray<E> {
         this.elements[Math.floorMod(front,capacity)] = Optional.of(elem);
         this.front--;
         this.size++;
+
+        this.modPointers();
     }
 
     /**
@@ -77,6 +89,8 @@ public abstract class DequeueArray<E> {
         this.elements[Math.floorMod(back,capacity)] = Optional.of(elem);
         this.back++;
         this.size++;
+
+        this.modPointers();
     }
 
     public E getFirst() throws NoSuchElementE {
@@ -98,6 +112,7 @@ public abstract class DequeueArray<E> {
         this.elements[Math.floorMod(front+1,capacity)] = Optional.empty();
         front++;
         this.size--;
+        this.modPointers();
         return returnE;
     }
 
@@ -110,6 +125,7 @@ public abstract class DequeueArray<E> {
         this.elements[Math.floorMod(back-1,capacity)] = Optional.empty();
         back--;
         this.size--;
+        this.modPointers();
         return returnElem;
     }
 

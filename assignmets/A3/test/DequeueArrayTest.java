@@ -101,7 +101,7 @@ public class DequeueArrayTest {
     @Test
     // Tests addFirst, removeFirst, addLast, and removeLast (also testing removeFirst and removeLast exceptions)
     // By testing removeFirst and removeLast, I'm testing getFirst and getLast indirectly
-    void addGetTests() throws NoSuchElementE {
+    void addRemoveTests() throws NoSuchElementE {
 
         DequeueArray<Integer> d = new DequeueArrayDouble<>(5);
         d.addFirst(1);
@@ -172,6 +172,16 @@ public class DequeueArrayTest {
         assertEquals(5, dequeueOne.getCapacity());
         dequeueOne.addLast(6);
         assertEquals(6, dequeueOne.getCapacity());
+    }
+
+    @Test
+    void modTests() throws NoSuchElementE {
+
+        DequeueArray<Integer> dequeueDouble = new DequeueArrayDouble<>(5);
+        dequeueDouble.addLast(0);
+        dequeueDouble.addLast(4);
+        dequeueDouble.addLast(3);
+        assertEquals(3, dequeueDouble.getBack());
     }
 }
 
