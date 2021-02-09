@@ -56,6 +56,9 @@ public abstract class DequeueArray<E> {
       */
     private void modPointers() {
 
+        // Modulation differs depending on if the value is negative and the value being
+        // modulated*-1 is less than the value of the mod (i.e. -2%5 is 3 but java returns -2,
+        // while -6%5 is 1 and java returns the correct value)
         this.front = this.front < 0 ? this.capacity - (this.front*-1) % this.capacity : this.front;
         this.front = this.front >= this.capacity? this.front % this.capacity : this.front;
 
