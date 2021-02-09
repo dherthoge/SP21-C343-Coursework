@@ -101,7 +101,7 @@ public class DequeueArrayTest {
     @Test
     // Tests addFirst, removeFirst, addLast, and removeLast (also testing removeFirst and removeLast exceptions)
     // By testing removeFirst and removeLast, I'm testing getFirst and getLast indirectly
-    void addRemoveTests() throws NoSuchElementE {
+    void addRemoveTest() throws NoSuchElementE {
 
         DequeueArray<Integer> d = new DequeueArrayDouble<>(5);
         d.addFirst(1);
@@ -127,7 +127,7 @@ public class DequeueArrayTest {
     }
 
     @Test
-    void growTests() throws NoSuchElementE {
+    void growTest() throws NoSuchElementE {
 
         DequeueArray<Integer> dequeueDouble = new DequeueArrayDouble<>(2);
         dequeueDouble.addLast(1);
@@ -175,13 +175,47 @@ public class DequeueArrayTest {
     }
 
     @Test
-    void modTests() throws NoSuchElementE {
+    void modTest() throws NoSuchElementE {
 
         DequeueArray<Integer> dequeueDouble = new DequeueArrayDouble<>(5);
+        dequeueDouble.addFirst(0);
+        dequeueDouble.addFirst(4);
+        dequeueDouble.addFirst(3);
+        System.out.println(dequeueDouble);
+        dequeueDouble.removeLast();
+        dequeueDouble.removeLast();
+        dequeueDouble.removeLast();
+        System.out.println(dequeueDouble);
+        assertEquals(2, dequeueDouble.getBack());
+    }
+
+    @Test
+    void plusOneAddLastResizeTest() {
+
+        DequeueArray<Integer> dequeueDouble = new DequeueArrayPlusOne<>(2);
+        dequeueDouble.addFirst(1);
+        dequeueDouble.addFirst(0);
+        dequeueDouble.addLast(1);
         dequeueDouble.addLast(0);
-        dequeueDouble.addLast(4);
+    }
+
+    @Test
+    void oneAndAHalfTests() {
+
+        DequeueArray<Integer> dequeueDouble = new DequeueArrayOneAndHalf<>(2);
+        dequeueDouble.addFirst(0);
+        dequeueDouble.addFirst(1);
+        dequeueDouble.addLast(2);
         dequeueDouble.addLast(3);
-        assertEquals(3, dequeueDouble.getBack());
+        dequeueDouble.addFirst(4);
+        dequeueDouble.addFirst(5);
+        dequeueDouble.addLast(6);
+        dequeueDouble.addLast(7);
+        dequeueDouble.addFirst(8);
+        dequeueDouble.addFirst(9);
+        dequeueDouble.addLast(10);
+        dequeueDouble.addLast(11);
+        dequeueDouble.addLast(12);
     }
 }
 

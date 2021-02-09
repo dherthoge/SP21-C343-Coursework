@@ -5,6 +5,7 @@ import java.util.Optional;
 class NoSuchElementE extends Exception {}
 
 public abstract class DequeueArray<E> {
+
     protected Optional<E>[] elements;
     protected int capacity, front, back, size;
     //
@@ -55,8 +56,8 @@ public abstract class DequeueArray<E> {
       */
     private void modPointers() {
 
-        this.front = this.front % this.capacity;
-        this.back = this.back % this.capacity;
+        this.front = this.front < 0 ? this.capacity - (this.front*-1) % this.capacity : this.front;
+        this.back = this.back < 0 ? this.capacity - (this.back*-1) % this.capacity : this.back;
     }
 
     /**
@@ -83,7 +84,7 @@ public abstract class DequeueArray<E> {
     public void addLast(E elem) {
 
         // Check for need to grow
-        if (this.size == this.capacity) this.grow();
+        if (this.size >= this.capacity) this.grow();
 
         // Add the element after growth (if necessary) and update this.front and this.size
         this.elements[Math.floorMod(back,capacity)] = Optional.of(elem);
@@ -238,7 +239,7 @@ class DequeueArrayOneAndHalf<E> extends DequeueArray<E> {
         this.capacity = (int) Math.ceil((this.getCapacity() * 1.5));
         this.front = this.capacity - 1;
         this.size = numElemToTrans;
-        this.back = this.size() - 1;
+        this.back = this.size();
     }
 }
 
