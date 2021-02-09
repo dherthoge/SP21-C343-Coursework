@@ -57,7 +57,10 @@ public abstract class DequeueArray<E> {
     private void modPointers() {
 
         this.front = this.front < 0 ? this.capacity - (this.front*-1) % this.capacity : this.front;
+        this.front = this.front >= this.capacity? this.front % this.capacity : this.front;
+
         this.back = this.back < 0 ? this.capacity - (this.back*-1) % this.capacity : this.back;
+        this.back = this.back >= this.capacity ? this.back % this.capacity : this.back;
     }
 
     /**

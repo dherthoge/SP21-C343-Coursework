@@ -2,8 +2,6 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Optional;
-import java.util.Queue;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -110,8 +108,8 @@ public class DequeueArrayTest {
         assertEquals(3, d.removeFirst());
         assertEquals(2, d.removeFirst());
         assertEquals(1, d.removeFirst());
-        assertThrows(NoSuchElementE.class, () -> d.removeFirst());
-        assertThrows(NoSuchElementE.class, () -> d.removeLast());
+        assertThrows(NoSuchElementE.class, d::removeFirst);
+        assertThrows(NoSuchElementE.class, d::removeLast);
         d.addFirst(1);
         d.addFirst(2);
         d.addFirst(3);
@@ -142,6 +140,7 @@ public class DequeueArrayTest {
         assertEquals(8, dequeueDouble.getCapacity());
         dequeueDouble.addLast(6);
         assertEquals(8, dequeueDouble.getCapacity());
+        dequeueDouble.removeFirst();
 
 
         DequeueArray<Integer> dequeueHalf = new DequeueArrayOneAndHalf<>(2);
@@ -157,6 +156,7 @@ public class DequeueArrayTest {
         assertEquals(5, dequeueHalf.getCapacity());
         dequeueHalf.addLast(6);
         assertEquals(8, dequeueHalf.getCapacity());
+        dequeueHalf.removeFirst();
 
 
         DequeueArray<Integer> dequeueOne = new DequeueArrayPlusOne<>(2);
@@ -172,6 +172,7 @@ public class DequeueArrayTest {
         assertEquals(5, dequeueOne.getCapacity());
         dequeueOne.addLast(6);
         assertEquals(6, dequeueOne.getCapacity());
+        dequeueHalf.removeFirst();
     }
 
     @Test
@@ -189,6 +190,8 @@ public class DequeueArrayTest {
         assertEquals(2, dequeueDouble.getBack());
     }
 
+
+    // Used for debugging autograder errors
     @Test
     void plusOneAddLastResizeTest() {
 
@@ -216,6 +219,23 @@ public class DequeueArrayTest {
         dequeueDouble.addLast(10);
         dequeueDouble.addLast(11);
         dequeueDouble.addLast(12);
+    }
+
+    @Test
+    void removeFirstModTest() throws NoSuchElementE {
+
+        DequeueArray<Integer> dequeueDouble = new DequeueArrayOneAndHalf<>(5);
+        dequeueDouble.addLast(0);
+        dequeueDouble.addLast(1);
+        dequeueDouble.addLast(2);
+        dequeueDouble.addLast(3);
+        dequeueDouble.removeFirst();
+        dequeueDouble.removeFirst();
+        dequeueDouble.removeFirst();
+        dequeueDouble.addLast(0);
+        dequeueDouble.addLast(1);
+        dequeueDouble.addLast(2);
+        dequeueDouble.addLast(3);
     }
 }
 
