@@ -57,30 +57,6 @@ public class HashTableTest {
         assertEquals(Optional.of(new AbstractMap.SimpleImmutableEntry<>(6,"monkey")),slots.get(6));
     }
 
-
-    @Test
-    public void clashQuad () {
-        HashTable<Integer,String> ht = new HashQuadProbing<>();
-        ht.insert(0,"lamb");
-        ht.insert(17,"cat");
-        ht.insert(34,"dog");
-        ht.insert(51,"horse");
-        ht.insert(68,"cow");
-        ht.insert(8, "fox");
-        ht.insert(85,"tiger");
-
-        assertEquals(7, ht.getSize());
-        assertTrue(ht.getDeleted().isEmpty());
-
-        ArrayList<Optional<Map.Entry<Integer,String>>> slots = ht.getSlots();
-        assertEquals(Optional.of(new AbstractMap.SimpleImmutableEntry<>(0,"lamb")),slots.get(0));
-        assertEquals(Optional.of(new AbstractMap.SimpleImmutableEntry<>(17,"cat")),slots.get(1));
-        assertEquals(Optional.of(new AbstractMap.SimpleImmutableEntry<>(34,"dog")),slots.get(4));
-        assertEquals(Optional.of(new AbstractMap.SimpleImmutableEntry<>(51,"horse")),slots.get(9));
-        assertEquals(Optional.of(new AbstractMap.SimpleImmutableEntry<>(8,"fox")),slots.get(8));
-        assertEquals(Optional.of(new AbstractMap.SimpleImmutableEntry<>(85,"tiger")),slots.get(2));
-    }
-
     @Test
     public void clashLinear () throws NotFoundE {
         HashTable<Integer,String> ht = new HashLinearProbing<>();
@@ -125,6 +101,29 @@ public class HashTableTest {
         assertEquals(Optional.of(new AbstractMap.SimpleImmutableEntry<>(14,"dog")),slots.get(14));
         assertEquals(Optional.of(new AbstractMap.SimpleImmutableEntry<>(49,"lion")),slots.get(15));
         assertTrue(slots.get(16).isEmpty());
+    }
+
+    @Test
+    public void clashQuad () {
+        HashTable<Integer,String> ht = new HashQuadProbing<>();
+        ht.insert(0,"lamb");
+        ht.insert(17,"cat");
+        ht.insert(34,"dog");
+        ht.insert(51,"horse");
+        ht.insert(68,"cow");
+        ht.insert(8, "fox");
+        ht.insert(85,"tiger");
+
+        assertEquals(7, ht.getSize());
+        assertTrue(ht.getDeleted().isEmpty());
+
+        ArrayList<Optional<Map.Entry<Integer,String>>> slots = ht.getSlots();
+        assertEquals(Optional.of(new AbstractMap.SimpleImmutableEntry<>(0,"lamb")),slots.get(0));
+        assertEquals(Optional.of(new AbstractMap.SimpleImmutableEntry<>(17,"cat")),slots.get(1));
+        assertEquals(Optional.of(new AbstractMap.SimpleImmutableEntry<>(34,"dog")),slots.get(4));
+        assertEquals(Optional.of(new AbstractMap.SimpleImmutableEntry<>(51,"horse")),slots.get(9));
+        assertEquals(Optional.of(new AbstractMap.SimpleImmutableEntry<>(8,"fox")),slots.get(8));
+        assertEquals(Optional.of(new AbstractMap.SimpleImmutableEntry<>(85,"tiger")),slots.get(2));
     }
 
     @Test

@@ -9,16 +9,21 @@ class NotFoundE extends Exception {}
 // -------------------------------------------------------
 
 abstract class HashTable<K,V> {
+
     // the current capacity of the underlying array
     private int capacity;
+
     // the number of elements currently stored in the hashtable
     private int size;
+
     // the underlying array: each index of the array is either
     // Optional.empty(), or
     // Optional.of(new AbstractMap.SimpleImmutableEntry<>(key, value))
     private ArrayList<Optional<Map.Entry<K, V>>> slots;
+
     // collects the indices of deleted items
     private HashSet<Integer> deleted;
+
     // a function defined in subclasses that determines
     // the next offset in case of collisions:
     // we will only define linear and quadratic probing
@@ -55,17 +60,13 @@ abstract class HashTable<K,V> {
 
     // use Java hashcode (wrapping around to make sure the index
     // remains in bound
-    int hash(K key) {
-        return key.hashCode() % capacity;
-    }
+    int hash(K key) { return key.hashCode() % capacity; }
 
-    // in case of collisions we add to the current index the
+    // in case of collisions we add to the current index to the
     // offset calculated by the given function (linear
     // or quadratic); and of course we wrap around to make
     // sure we stay in bounds
-    int nextHash(int index, int collision) {
-        return (index + offset.apply(collision)) % capacity;
-    }
+    int nextHash(int index, int collision) { return (index + offset.apply(collision)) % capacity; }
 
     // -------------------------------------------------------
 
@@ -96,6 +97,16 @@ abstract class HashTable<K,V> {
     void insert(K key, V value, int index, int collision) {
         // TODO
         // call nextHash() for the next hash
+
+        int hash = nextHash(index, collision);
+
+        if (slots.get(hash).equals(Optional.empty())){
+            slots.set(hash, Optional.of(new AbstractMap.SimpleImmutableEntry<>(key, value)));
+            size++;
+//            if(size > capacity/2) rehash();
+        } else {
+            insert(key, value, index, collision+1);
+        }
     }
 
     // -------------------------------------------------------
@@ -135,11 +146,25 @@ abstract class HashTable<K,V> {
     // for deleting and is left for you as an exercise
 
     V search(K key) throws NotFoundE {
-        return null; // TODO
+
+        return search(key, hash(key), 0);
     }
 
     V search(K key, int index, int collision) throws NotFoundE {
-        return null; // TODO
+
+        V value = null;
+
+        int hash = nextHash(index, collision);
+
+        if (slots.get(hash).equals(Optional.empty())) {
+            throw new NotFoundE();
+        } else if (slots.get(hash).get().getKey().equals(key)){
+            value =  slots.get(hash).get().getValue();
+        } else {
+            search(key, index, offset.apply(collision));
+        }
+
+        return value;
     }
 
     // -------------------------------------------------------
