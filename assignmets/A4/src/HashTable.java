@@ -100,10 +100,20 @@ abstract class HashTable<K,V> {
 
         int hash = nextHash(index, collision);
 
+        // If the key value pair is already there, do not do anything further
+        if (!slots.get(hash).equals(Optional.empty())) {
+            Boolean fuck = slots.get(hash).get().getKey().equals(key);
+            if (slots.get(hash).get().getKey().equals(key)) {
+                return;
+            }
+        }
+
         if (slots.get(hash).equals(Optional.empty())){
             slots.set(hash, Optional.of(new AbstractMap.SimpleImmutableEntry<>(key, value)));
             size++;
-//            if(size > capacity/2) rehash();
+            deleted.remove(hash);
+
+            if(size > capacity/2) rehash();
         } else {
             insert(key, value, index, collision+1);
         }
@@ -137,6 +147,23 @@ abstract class HashTable<K,V> {
     // - otherwise, set slot 'h' to empty, decrement size,
     //   and add 'h' to the collection of deleted indices
     void delete(K key, int index, int collision) throws NotFoundE {
+
+        int hash = nextHash(index, collision);
+
+        if (deleted.contains(hash)) {
+            delete(key, index, offset.apply(collision+1));
+        }
+        else if (slots.get(hash).equals(Optional.empty())) {
+            throw new NotFoundE();
+        }
+        else if (slots.get(hash).get().getKey().equals(key)){
+            slots.set(hash, Optional.empty());
+            size -= 1;
+            deleted.add(hash);
+        }
+        else {
+            delete(key, index, offset.apply(collision+1));
+        }
         // TODO
     }
 
@@ -152,35 +179,60 @@ abstract class HashTable<K,V> {
 
     V search(K key, int index, int collision) throws NotFoundE {
 
-        V value = null;
-
         int hash = nextHash(index, collision);
 
-        if (slots.get(hash).equals(Optional.empty())) {
-            throw new NotFoundE();
-        } else if (slots.get(hash).get().getKey().equals(key)){
-            value =  slots.get(hash).get().getValue();
-        } else {
-            search(key, index, offset.apply(collision));
+        if (deleted.contains(hash)) {
+            return search(key, index, offset.apply(collision+1));
         }
-
-        return value;
+        else if (slots.get(hash).equals(Optional.empty())) {
+            throw new NotFoundE();
+        }
+        else if (slots.get(hash).get().getKey().equals(key)){
+            return slots.get(hash).get().getValue();
+        }
+        else {
+            return search(key, index, offset.apply(collision+1));
+        }
     }
 
     // -------------------------------------------------------
 
     // to rehash, we will perform the following actions:
-    // - calculate a new capacity as follows:
+    // - +calculate a new capacity as follows:
     //   BigInteger.valueOf(oldCapacity*2L).nextProbablePrime().intValue();
     //   this will ensure that capacity is always a prime number
     // - create a new array of the new capacity
     // - enter a loop that takes every item in the old array
     //   and inserts it in the new array
-    // - replace the old array by the new one and clear the
+    // - +replace the old array by the new one and clear the
     //   collection of deleted indices
     void rehash () {
         // TODO
         // have to duplicate the insert logic
+
+        // Store the old slots
+        ArrayList<Optional<Map.Entry<K,V>>> oldSlots = this.getSlots();
+
+        // Reinitialize this.slots with a larger ArrayList
+        this.capacity = BigInteger.valueOf(this.capacity*2L).nextProbablePrime().intValue();
+        this.slots = new ArrayList<>(this.capacity);
+        this.size = 0;
+        for (int i = 0; i < this.capacity; i++) this.slots.add(i, Optional.empty());
+
+        // Transfer the old data
+        for (Optional<Map.Entry<K, V>> oldSlot : oldSlots) {
+
+            // If the slot is not empty, transfer thh elements
+            if (!oldSlot.equals(Optional.empty())) {
+
+                K key = oldSlot.get().getKey();
+                V value = oldSlot.get().getValue();
+                this.insert(key, value);
+            }
+        }
+
+        // Reinitialize the deleted set
+        deleted = new HashSet<>();
     }
 
     // -------------------------------------------------------

@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class HashTableTest {
 
     @Test
-    public void simpleLinear () {
+    public void simpleLinear() {
         HashTable<Integer,String> ht = new HashLinearProbing<>();
         ht.insert(0,"lamb");
         ht.insert(1,"cat");
@@ -34,7 +34,7 @@ public class HashTableTest {
     }
 
     @Test
-    public void simpleQuad () {
+    public void simpleQuad() {
         HashTable<Integer,String> ht = new HashQuadProbing<>();
         ht.insert(0,"lamb");
         ht.insert(1,"cat");
@@ -58,7 +58,7 @@ public class HashTableTest {
     }
 
     @Test
-    public void clashLinear () throws NotFoundE {
+    public void clashLinear() throws NotFoundE {
         HashTable<Integer,String> ht = new HashLinearProbing<>();
 
         assertThrows(NotFoundE.class, () -> ht.search(1000));
@@ -104,7 +104,7 @@ public class HashTableTest {
     }
 
     @Test
-    public void clashQuad () {
+    public void clashQuad() {
         HashTable<Integer,String> ht = new HashQuadProbing<>();
         ht.insert(0,"lamb");
         ht.insert(17,"cat");
@@ -127,7 +127,7 @@ public class HashTableTest {
     }
 
     @Test
-    public void deletes () throws NotFoundE {
+    public void deletes() throws NotFoundE {
         HashTable<Integer,String> ht = new HashLinearProbing<>();
 
         ht.insert(1,"cat");
@@ -163,4 +163,107 @@ public class HashTableTest {
 
     // TODO
     // your own test cases here
+
+    @Test
+    public void rehash() throws NotFoundE {
+        HashTable<Integer,String> ht = new HashLinearProbing<>();
+
+        ht.insert(1,"cat");
+        ht.insert(14,"mouse");
+        ht.insert(18,"dog");
+        ht.insert(35,"horse");
+        ht.insert(52,"cow");
+        ht.insert(69,"chicken");
+        ht.insert(86,"lion");
+        ht.insert(103,"tiger");
+
+        ArrayList<Optional<Map.Entry<Integer,String>>> slots = ht.getSlots();
+        assertTrue(slots.get(0).isEmpty());
+        assertEquals(Optional.of(new AbstractMap.SimpleImmutableEntry<>(1,"cat")),slots.get(1));
+        assertEquals(Optional.of(new AbstractMap.SimpleImmutableEntry<>(18,"dog")),slots.get(2));
+        assertEquals(Optional.of(new AbstractMap.SimpleImmutableEntry<>(35,"horse")),slots.get(3));
+        assertEquals(Optional.of(new AbstractMap.SimpleImmutableEntry<>(52,"cow")),slots.get(4));
+        assertEquals(Optional.of(new AbstractMap.SimpleImmutableEntry<>(69,"chicken")),slots.get(5));
+        assertEquals(Optional.of(new AbstractMap.SimpleImmutableEntry<>(86,"lion")),slots.get(6));
+        assertEquals(Optional.of(new AbstractMap.SimpleImmutableEntry<>(103,"tiger")),slots.get(7));
+        assertTrue(slots.get(8).isEmpty());
+        assertTrue(slots.get(9).isEmpty());
+        assertTrue(slots.get(10).isEmpty());
+        assertTrue(slots.get(11).isEmpty());
+        assertTrue(slots.get(12).isEmpty());
+        assertTrue(slots.get(13).isEmpty());
+        assertEquals(Optional.of(new AbstractMap.SimpleImmutableEntry<>(14,"mouse")),slots.get(14));
+        assertTrue(slots.get(15).isEmpty());
+        assertTrue(slots.get(16).isEmpty());
+
+
+
+        ht.delete(86);
+        ht.delete(103);
+        assertTrue(slots.get(6).isEmpty());
+        assertTrue(slots.get(7).isEmpty());
+
+
+        // Inserting already present values
+        ht.insert(1,"cat");
+        ht.insert(14,"mouse");
+        ht.insert(18,"dog");
+        ht.insert(35,"horse");
+
+
+//        ht.insert(86,"lion");
+//        ht.insert(103,"tiger");
+        ht.insert(128,"cheetah");
+        ht.insert(142,"puma");
+        ht.insert(170,"bird");
+        ht.insert(983,"monkey");
+
+        slots = ht.getSlots();
+        assertTrue(slots.get(0).isEmpty());
+        assertEquals(Optional.of(new AbstractMap.SimpleImmutableEntry<>(1,"cat")),slots.get(1));
+        assertTrue(slots.get(2).isEmpty());
+        assertTrue(slots.get(3).isEmpty());
+        assertTrue(slots.get(4).isEmpty());
+        assertTrue(slots.get(5).isEmpty());
+        assertTrue(slots.get(6).isEmpty());
+        assertTrue(slots.get(7).isEmpty());
+        assertTrue(slots.get(8).isEmpty());
+        assertTrue(slots.get(9).isEmpty());
+        assertTrue(slots.get(10).isEmpty());
+        assertTrue(slots.get(11).isEmpty());
+        assertTrue(slots.get(12).isEmpty());
+//        assertEquals(Optional.of(new AbstractMap.SimpleImmutableEntry<>(86,"lion")),
+//                slots.get(12));
+        assertTrue(slots.get(13).isEmpty());
+        assertEquals(Optional.of(new AbstractMap.SimpleImmutableEntry<>(14,"mouse")),slots.get(14));
+        assertEquals(Optional.of(new AbstractMap.SimpleImmutableEntry<>(52,"cow")),
+                slots.get(15));
+        assertTrue(slots.get(16).isEmpty());
+        assertEquals(Optional.of(new AbstractMap.SimpleImmutableEntry<>(128,"cheetah")),
+                slots.get(17));
+        assertEquals(Optional.of(new AbstractMap.SimpleImmutableEntry<>(18,"dog")),slots.get(18));
+        assertTrue(slots.get(19).isEmpty());
+        assertTrue(slots.get(20).isEmpty());
+        assertEquals(Optional.of(new AbstractMap.SimpleImmutableEntry<>(983,"monkey")),
+                slots.get(21));
+        assertEquals(Optional.of(new AbstractMap.SimpleImmutableEntry<>(170,"bird")),slots.get(22));
+        assertTrue(slots.get(23).isEmpty());
+        assertTrue(slots.get(24).isEmpty());
+        assertTrue(slots.get(25).isEmpty());
+        assertTrue(slots.get(26).isEmpty());
+        assertTrue(slots.get(27).isEmpty());
+        assertTrue(slots.get(28).isEmpty());
+        assertTrue(slots.get(29).isEmpty());
+//        assertEquals(Optional.of(new AbstractMap.SimpleImmutableEntry<>(103,"tiger")),
+//                slots.get(29));
+        assertTrue(slots.get(30).isEmpty());
+        assertEquals(Optional.of(new AbstractMap.SimpleImmutableEntry<>(142,"puma")),
+                slots.get(31));
+        assertEquals(Optional.of(new AbstractMap.SimpleImmutableEntry<>(69,"chicken")),
+                slots.get(32));
+        assertTrue(slots.get(33).isEmpty());
+        assertTrue(slots.get(34).isEmpty());
+        assertEquals(Optional.of(new AbstractMap.SimpleImmutableEntry<>(35,"horse")),slots.get(35));
+        assertTrue(slots.get(36).isEmpty());
+    }
 }
