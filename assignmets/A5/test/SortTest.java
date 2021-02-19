@@ -2,6 +2,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -35,8 +36,29 @@ class SortTest {
         assertEquals(sorted, Sort.streamSort(ns));
         assertEquals(sorted, Sort.insertionSort(ns));
         assertEquals(sorted, Sort.mergeSort(ns));
-//        assertEquals(sorted, Sort.shellSort(ns));
+        assertEquals(sorted, Sort.shellSort(ns));
 //        assertEquals(sorted, Sort.radixSort(ns,3));
+
+        List<Integer> ns1 = Arrays.asList();
+        List<Integer> sorted1 = Arrays.asList();
+
+        assertEquals(sorted1, Sort.streamSort(ns1));
+        assertEquals(sorted1, Sort.insertionSort(ns1));
+        assertEquals(sorted1, Sort.mergeSort(ns1));
+        assertEquals(sorted1, Sort.shellSort(ns1));
+//        assertEquals(sorted1, Sort.radixSort(ns1,3));
+
+
+        Random random = new Random();
+        List<Integer> ns2 = new ArrayList<>();
+        for (int i = 0; i < 10000; i++) ns2.add(random.nextInt(1000));
+        List<Integer> sorted2 = Sort.streamSort(ns2);
+
+        assertEquals(sorted2, Sort.streamSort(ns2));
+        assertEquals(sorted2, Sort.insertionSort(ns2));
+        assertEquals(sorted2, Sort.mergeSort(ns2));
+        assertEquals(sorted2, Sort.shellSort(ns2));
+//        assertEquals(sorted2, Sort.radixSort(ns2,3));
     }
 
     Duration timeM (Function<List<Integer>,List<Integer>> f, List<Integer> ns) {
@@ -74,5 +96,4 @@ class SortTest {
 //        d = timeM(nums -> Sort.radixSort(nums, 3), ns).toMillis();
 //        System.out.printf("Radix sort takes %d ms%n", d);
     }
-
 }

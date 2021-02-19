@@ -80,7 +80,6 @@ class PEmpty extends PList {
     }
 }
 
-
 class PNode extends PList {
     private final int elem;
     private final PList rest;
@@ -173,7 +172,7 @@ class PNode extends PList {
         // Else the right list is as small as it can get
         else { sortedRight = right; }
 
-        return sortedLeft.merge(sortedRight); // TODO mergeSort
+        return sortedLeft.merge(sortedRight);
     }
 
     PList merge(PList ns) {

@@ -18,7 +18,7 @@ public class Sort {
         for (int i = 1; i < copiedList.size(); i++) {
 
             int currentInt = copiedList.get(i);
-            int j = i - 1;
+            int j = i-1;
 
             while (j >= 0 && currentInt < copiedList.get(j)) {
 
@@ -56,7 +56,37 @@ public class Sort {
      *    by the given gap
      */
     static List<Integer> shellSort (List<Integer> ns) {
-        return null; // TODO shellSort
+
+        List<Integer> copiedList = new ArrayList<>(ns);
+
+        List<Integer> incSequence = new ArrayList<>();
+        incSequence.add(increment(0));
+        int n = 1;
+        while (incSequence.get(incSequence.size()-1) < ns.size()/2){
+
+            incSequence.add(increment(n));
+            n += 1;
+        }
+
+        for (int k = incSequence.size()-1; k >= 0; k--) {
+            int gap = incSequence.get(k);
+
+            for (int i = gap; i < copiedList.size(); i += gap) {
+
+                int currentInt = copiedList.get(i);
+                int j = i-gap;
+
+                while (j >= 0 && currentInt < copiedList.get(j)) {
+
+                    copiedList.set(j+gap, copiedList.get(j));
+                    j -= gap;
+                }
+
+                copiedList.set(j+gap, currentInt);
+            }
+        }
+
+        return copiedList;
     }
 
     static int getDigit (int n, int d) {
@@ -76,6 +106,8 @@ public class Sort {
      * 5. Clear the buckets and repeat for the next 'd'
      */
     static List<Integer> radixSort (List<Integer> ns, int len) {
+
+        List<Integer> copiedList = new ArrayList<>(ns);
         return null; // TODO radixSort
     }
 
