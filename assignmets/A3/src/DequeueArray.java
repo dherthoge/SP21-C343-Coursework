@@ -286,6 +286,6 @@ class DequeueArrayPlusOne<E> extends DequeueArray<E> {
         this.capacity++;
         this.front = this.capacity - 1;
         this.size = numElemToTrans;
-        this.back = this.capacity - 1;
+        this.back = this.size();
     }
 }

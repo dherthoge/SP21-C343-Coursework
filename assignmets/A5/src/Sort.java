@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -108,7 +109,33 @@ public class Sort {
     static List<Integer> radixSort (List<Integer> ns, int len) {
 
         List<Integer> copiedList = new ArrayList<>(ns);
-        return null; // TODO radixSort
+
+        List<ArrayList<Integer>> buckets = new ArrayList<>(10);
+        for (int i = 0; i < 10; i++) buckets.add(new ArrayList<Integer>());
+
+        for (int d = 0; d < len; d++) {
+
+            for (int i = 0; i < copiedList.size(); i++) {
+
+                int currentInt = copiedList.get(i);
+
+                int bucket = getDigit(currentInt, d);
+                buckets.get(bucket).add(currentInt);
+            }
+
+            copiedList.clear();
+            for (int i = 0; i < 10; i++) {
+
+                ArrayList<Integer> currentBucket = buckets.get(i);
+                for (int j = 0; j < currentBucket.size(); j++) {
+
+                    copiedList.add(currentBucket.get(j));
+                }
+                buckets.get(i).clear();
+            }
+        }
+
+        return copiedList; // TODO radixSort
     }
 
 }

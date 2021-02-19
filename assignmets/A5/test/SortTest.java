@@ -37,7 +37,7 @@ class SortTest {
         assertEquals(sorted, Sort.insertionSort(ns));
         assertEquals(sorted, Sort.mergeSort(ns));
         assertEquals(sorted, Sort.shellSort(ns));
-//        assertEquals(sorted, Sort.radixSort(ns,3));
+        assertEquals(sorted, Sort.radixSort(ns,3));
 
         List<Integer> ns1 = Arrays.asList();
         List<Integer> sorted1 = Arrays.asList();
@@ -46,7 +46,7 @@ class SortTest {
         assertEquals(sorted1, Sort.insertionSort(ns1));
         assertEquals(sorted1, Sort.mergeSort(ns1));
         assertEquals(sorted1, Sort.shellSort(ns1));
-//        assertEquals(sorted1, Sort.radixSort(ns1,3));
+        assertEquals(sorted1, Sort.radixSort(ns1,0));
 
 
         Random random = new Random();
@@ -58,7 +58,7 @@ class SortTest {
         assertEquals(sorted2, Sort.insertionSort(ns2));
         assertEquals(sorted2, Sort.mergeSort(ns2));
         assertEquals(sorted2, Sort.shellSort(ns2));
-//        assertEquals(sorted2, Sort.radixSort(ns2,3));
+        assertEquals(sorted2, Sort.radixSort(ns2,4));
     }
 
     Duration timeM (Function<List<Integer>,List<Integer>> f, List<Integer> ns) {
@@ -90,10 +90,10 @@ class SortTest {
         d = timeM(Sort::mergeSort, ns).toMillis();
         System.out.printf("Merge sort takes %d ms%n", d);
 
-//        d = timeM(Sort::shellSort, ns).toMillis();
-//        System.out.printf("Shell sort takes %d ms%n", d);
-//
-//        d = timeM(nums -> Sort.radixSort(nums, 3), ns).toMillis();
-//        System.out.printf("Radix sort takes %d ms%n", d);
+        d = timeM(Sort::shellSort, ns).toMillis();
+        System.out.printf("Shell sort takes %d ms%n", d);
+
+        d = timeM(nums -> Sort.radixSort(nums, 3), ns).toMillis();
+        System.out.printf("Radix sort takes %d ms%n", d);
     }
 }
