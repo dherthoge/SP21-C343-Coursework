@@ -34,7 +34,7 @@ class SortTest {
 
         assertEquals(sorted, Sort.streamSort(ns));
         assertEquals(sorted, Sort.insertionSort(ns));
-//        assertEquals(sorted, Sort.mergeSort(ns));
+        assertEquals(sorted, Sort.mergeSort(ns));
 //        assertEquals(sorted, Sort.shellSort(ns));
 //        assertEquals(sorted, Sort.radixSort(ns,3));
     }
@@ -65,9 +65,9 @@ class SortTest {
         d = timeM(Sort::insertionSort, ns).toMillis();
         System.out.printf("Insertion sort takes %d ms%n", d);
 
-//        d = timeM(Sort::mergeSort, ns).toMillis();
-//        System.out.printf("Merge sort takes %d ms%n", d);
-//
+        d = timeM(Sort::mergeSort, ns).toMillis();
+        System.out.printf("Merge sort takes %d ms%n", d);
+
 //        d = timeM(Sort::shellSort, ns).toMillis();
 //        System.out.printf("Shell sort takes %d ms%n", d);
 //

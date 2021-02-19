@@ -73,6 +73,11 @@ class PEmpty extends PList {
     PList mergeSort() { return this; }
 
     PList merge(PList ns) { return ns; }
+
+    @Override
+    public String toString() {
+        return "PEmpty";
+    }
 }
 
 
@@ -101,21 +106,92 @@ class PNode extends PList {
 
     Pair<PList, PList> splitAt(int index) {
 
-        PNode pList1 =
+        PList l1 = splitAtFirstList(index, this);
+        PList l2 = splitAtSecondList(index, this);
 
-        for (int i = 0; i < index; i++) {
+        int i = 1+1;
 
+        return new Pair<>(l1, l2);
+    }
+
+    /**
+     * Returns every element PList in the given PList to the given index (exclusive).
+     */
+    static PList splitAtFirstList(int index, PList pNode)  {
+
+        if (index == 0) {
+            return new PEmpty();
         }
+        else {
+            try {
+                return new PNode(pNode.getElem(), splitAtFirstList(index - 1, pNode.getRest()));
+            }
+            catch (PEmptyE e) { return pNode;}
+        }
+    }
 
-        return null; // TODO splitAt
+    /**
+     * Returns every element PList in the given PList from the given index (inclusive) on.
+     */
+    static PList splitAtSecondList(int index, PList pList) {
+
+        // If the index is 0, return the given Plist
+        if (index == 0) { return pList; }
+        // else decrement the index and recur unless pList is a PEmpty, return the PEmpty
+        else {
+            try {
+                return splitAtSecondList(index - 1, pList.getRest());
+            }
+            catch (PEmptyE e) {
+                return pList;
+            }
+        }
     }
 
     PList mergeSort() {
-        return null; // TODO mergeSort
+
+        // Find the middle index of the list
+        int middle = this.len / 2;
+
+        // Get the left side of the list
+        PList left = this.splitAt(middle).getFst();
+
+        PList sortedLeft;
+        // If the left list is greater than 1, keep breaking it in half
+        if (left.length() > 1) { sortedLeft = left.mergeSort(); }
+        // Else the left list is as small as it can get
+        else { sortedLeft = left; }
+
+
+
+        // Get the right side of the list
+        PList right = this.splitAt(middle).getSnd();
+
+        PList sortedRight;
+        // If the right list is greater than 1, keep breaking it in half
+        if (right.length() > 1) { sortedRight = right.mergeSort(); }
+        // Else the right list is as small as it can get
+        else { sortedRight = right; }
+
+        return sortedLeft.merge(sortedRight); // TODO mergeSort
     }
 
     PList merge(PList ns) {
-        return null; // TODO merge
+
+            try {
+                if (this.getElem() < ns.getElem()) {
+                    return new PNode(this.getElem(), this.rest.merge(ns));
+                }
+                else { return new PNode(ns.getElem(), this.merge(ns.getRest())); }
+            }
+            catch (PEmptyE e) {
+                return this;
+            }
+    }
+
+    @Override
+    public String toString() {
+        return this.getElem() + ", " + this.getRest().toString();
     }
 }
 
