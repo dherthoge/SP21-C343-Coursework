@@ -63,16 +63,18 @@ public class Sort {
         List<Integer> incSequence = new ArrayList<>();
         incSequence.add(increment(0));
         int n = 1;
-        while (incSequence.get(incSequence.size()-1) < ns.size()/2){
+        int nextGap = increment(n);
+        while (nextGap < ns.size()/2){
 
-            incSequence.add(increment(n));
+            incSequence.add(nextGap);
             n += 1;
+            nextGap = increment(n);
         }
 
         for (int k = incSequence.size()-1; k >= 0; k--) {
             int gap = incSequence.get(k);
 
-            for (int i = gap; i < copiedList.size(); i += gap) {
+            for (int i = gap; i < copiedList.size(); i++) {
 
                 int currentInt = copiedList.get(i);
                 int j = i-gap;
@@ -111,7 +113,7 @@ public class Sort {
         List<Integer> copiedList = new ArrayList<>(ns);
 
         List<ArrayList<Integer>> buckets = new ArrayList<>(10);
-        for (int i = 0; i < 10; i++) buckets.add(new ArrayList<Integer>());
+        for (int i = 0; i < 10; i++) buckets.add(new ArrayList<>());
 
         for (int d = 0; d < len; d++) {
 
@@ -135,7 +137,7 @@ public class Sort {
             }
         }
 
-        return copiedList; // TODO radixSort
+        return copiedList;
     }
 
 }
