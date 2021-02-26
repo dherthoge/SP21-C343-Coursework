@@ -56,11 +56,14 @@ public class DPTest {
 
     @Test
     public void partitionCorrectness() {
-        List<Integer> ns = new Node<>(5, new Node<>(3,
-                new Node<>(7, new Node<>(1, new Empty<>()))));
+        List<Integer> ns = new Node<>(5, new Node<>(3, new Node<>(7,
+                new Node<>(1, new Empty<>()))));
         assertFalse(DP.partition(ns, 2));
         assertTrue(DP.partition(ns, 8));
         assertTrue(DP.partition(ns, 6));
+        assertFalse(DP.mpartition(ns, 2));
+        assertTrue(DP.mpartition(ns, 8));
+        assertTrue(DP.mpartition(ns, 6));
     }
 
     @Test
@@ -69,6 +72,7 @@ public class DPTest {
         List<Integer> s = List.MakeIntList(r, 100, 1000);
         DP.partitionMemo.clear();
         long t = time2(DP::mpartition, s, 50000);
+        System.out.println(t);
         assertTrue(t < 799);
     }
 

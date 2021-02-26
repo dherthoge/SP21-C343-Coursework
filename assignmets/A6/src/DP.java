@@ -112,13 +112,44 @@ class DP {
      * subsequence of the list whose sum is exactly 's'
      */
     static boolean partition (List<Integer> s, int sum) {
-         return false; // TODO
+
+        if (sum == 0) return true;
+        else {
+            try {
+                return partition(s.getRest(), sum-s.getFirst()) || partition(s.getRest(), sum);
+            }catch (EmptyListE e) {
+                return false;
+            }
+        }
     }
 
     static final Map<Pair<List<Integer>,Integer>,Boolean> partitionMemo = new HashMap<>();
 
+    // TODO: Maybe too slow? Idk why tho
     static boolean mpartition (List<Integer> s, int sum) {
-        return false; // TODO
+
+        // See if this subproblem has already been computed
+        Pair<List<Integer>,Integer> probKey = new Pair<>(s, sum);
+        if (partitionMemo.containsKey(probKey)) return partitionMemo.get(probKey);
+
+        // Since it hasn't been computed, make a variable to store the answer
+        boolean answer;
+
+        // If the sum is zero, then there has to be a correct sequence
+        if (sum == 0) return true;
+        // Try to break down the subproblem
+        else {
+            try {
+                // See if sum can become 0 by either using the current "coin" or not
+                answer = partition(s.getRest(), sum-s.getFirst()) || partition(s.getRest(), sum);
+            }catch (EmptyListE e) {
+                answer = false;
+            }
+        }
+
+        // Store the answer to this subproblem and return it
+        partitionMemo.put(probKey, answer);
+        return answer;
     }
 
     // -----------------------------------------------------------------------------
