@@ -125,7 +125,6 @@ class DP {
 
     static final Map<Pair<List<Integer>,Integer>,Boolean> partitionMemo = new HashMap<>();
 
-    // TODO: Maybe too slow? Idk why tho
     static boolean mpartition (List<Integer> s, int sum) {
 
         // See if this subproblem has already been computed
@@ -141,7 +140,7 @@ class DP {
         else {
             try {
                 // See if sum can become 0 by either using the current "coin" or not
-                answer = partition(s.getRest(), sum-s.getFirst()) || partition(s.getRest(), sum);
+                answer = mpartition(s.getRest(), sum-s.getFirst()) || mpartition(s.getRest(), sum);
             }catch (EmptyListE e) {
                 answer = false;
             }
@@ -178,13 +177,53 @@ class DP {
      * the least penalty)
      */
     static int minDistance (List<BASE> dna1, List<BASE> dna2) {
-        return 0; // TODO
+
+        int penalty = 0;
+
+        try {
+
+            if (dna1.getFirst() == dna2.getFirst()) return MATCH + minDistance(dna1.getRest(),
+                    dna2.getRest());
+            else {
+                // Figures out which of the 3 options has the least overall penalty
+                penalty += Math.min(Math.min(MISMATCH + minDistance(dna1.getRest(), dna2.getRest()),
+                        GAP + minDistance(dna1.getRest(), dna2)), GAP + minDistance(dna1,
+                        dna2.getRest()));
+            }
+        }catch (EmptyListE e) {
+            if (dna1.isEmpty()) return dna2.length() * GAP;
+            else return dna1.length() * GAP;
+        }
+
+        return penalty;
     }
 
     static final Map<Pair<List<BASE>,List<BASE>>,Integer> minDistanceMemo = new HashMap<>();
 
     static int mminDistance (List<BASE> dna1, List<BASE> dna2) {
-        return 0; // TODO
+
+        Pair<List<BASE>,List<BASE>> probKey = new Pair<>(dna1, dna2);
+        if (minDistanceMemo.containsKey(probKey)) return minDistanceMemo.get(probKey);
+
+        int penalty = 0;
+
+        try {
+
+            if (dna1.getFirst() == dna2.getFirst()) return MATCH + mminDistance(dna1.getRest(), dna2.getRest());
+            else {
+                // Figures out which of the 3 options has the least overall penalty
+                penalty += Math.min(Math.min(MISMATCH + mminDistance(dna1.getRest(), dna2.getRest()),
+                        GAP + mminDistance(dna1.getRest(), dna2)), GAP + mminDistance(dna1,
+                        dna2.getRest()));
+            }
+        }catch (EmptyListE e) {
+            if (dna1.isEmpty()) return dna2.length() * GAP;
+            else return dna1.length() * GAP;
+        }
+
+        minDistanceMemo.put(probKey,penalty);
+
+        return penalty;
     }
 
     // -----------------------------------------------------------------------------
@@ -204,13 +243,45 @@ class DP {
      *     second call. Choose the longer of the two results
      */
     static List<Character> lcs (List<Character> cs1, List<Character> cs2) {
-        return null; // TODO
+
+        try {
+            if (cs1.getFirst() == cs2.getFirst()) {
+                return new Node<>(cs1.getFirst(), lcs(cs1.getRest(), cs2.getRest()));
+            } else {
+                List<Character> call1 = lcs(cs1.getRest(), cs2);
+                List<Character> call2 = lcs(cs1, cs2.getRest());
+                if (call1.length() > call2.length()) return call1;
+                else                                 return call2;
+            }
+        }catch (EmptyListE e) {
+            return new Empty<>();
+        }
     }
 
     static final Map<Pair<List<Character>,List<Character>>,List<Character>> lcsMemo = new HashMap<>();
 
     static List<Character> mlcs (List<Character> cs1, List<Character> cs2) {
-        return null; // TODO
-    }
 
+        Pair<List<Character>,List<Character>> probKey = new Pair<>(cs1, cs2);
+        if (lcsMemo.containsKey(probKey)) return lcsMemo.get(probKey);
+
+        List<Character> sequence;
+
+        try {
+            if (cs1.getFirst() == cs2.getFirst()) {
+                return new Node<>(cs1.getFirst(), mlcs(cs1.getRest(), cs2.getRest()));
+            } else {
+                List<Character> call1 = mlcs(cs1.getRest(), cs2);
+                List<Character> call2 = mlcs(cs1, cs2.getRest());
+                if (call1.length() > call2.length()) sequence = call1;
+                else                                 sequence = call2;
+            }
+        }catch (EmptyListE e) {
+            return new Empty<>();
+        }
+
+        lcsMemo.put(probKey,sequence);
+
+        return sequence;
+    }
 }

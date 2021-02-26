@@ -55,7 +55,7 @@ public class DPTest {
     // Testing partition correctness and timing
 
     @Test
-    public void partitionCorrectness() {
+     public void partitionCorrectness() {
         List<Integer> ns = new Node<>(5, new Node<>(3, new Node<>(7,
                 new Node<>(1, new Empty<>()))));
         assertFalse(DP.partition(ns, 2));
@@ -72,7 +72,6 @@ public class DPTest {
         List<Integer> s = List.MakeIntList(r, 100, 1000);
         DP.partitionMemo.clear();
         long t = time2(DP::mpartition, s, 50000);
-        System.out.println(t);
         assertTrue(t < 799);
     }
 
@@ -120,5 +119,32 @@ public class DPTest {
         List<Character> cs1 = List.MakeList(g, 310);
         List<Character> cs2 = List.MakeList(g, 250);
         assertEquals(240, DP.mlcs(cs1, cs2).length());
+    }
+
+    // My minDistanceTests
+
+    @Test
+    public void minDistanceTests() {
+        List<DP.BASE> dna1 =
+                new Node<>(DP.BASE.A, new Node<>(DP.BASE.C, new Node<>(DP.BASE.G, new Empty<>())));
+        List<DP.BASE> dna2 =
+                new Node<>(DP.BASE.A, new Node<>(DP.BASE.G, new Empty<>()));
+        assertEquals(2, DP.minDistance(dna1, dna2));
+
+
+        List<DP.BASE> dna3 =
+                new Node<>(DP.BASE.A, new Node<>(DP.BASE.A, new Node<>(DP.BASE.C,
+                        new Node<>(DP.BASE.A, new Node<>(DP.BASE.G,
+                        new Node<>(DP.BASE.T,
+                        new Node<>(DP.BASE.T,
+                new Node<>(DP.BASE.A,
+                new Node<>(DP.BASE.C,
+                        new Node<>(DP.BASE.C, new Empty<>()))))))))));
+        List<DP.BASE> dna4 =
+                new Node<>(DP.BASE.T, new Node<>(DP.BASE.A, new Node<>(DP.BASE.A,
+                        new Node<>(DP.BASE.G, new Node<>(DP.BASE.G,
+                        new Node<>(DP.BASE.T, new Node<>(DP.BASE.C,
+                        new Node<>(DP.BASE.A, new Empty<>()))))))));
+        assertEquals(7, DP.mminDistance(dna3, dna4));
     }
 }
