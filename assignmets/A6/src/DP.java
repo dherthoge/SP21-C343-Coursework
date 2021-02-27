@@ -250,7 +250,7 @@ class DP {
             } else {
                 List<Character> call1 = lcs(cs1.getRest(), cs2);
                 List<Character> call2 = lcs(cs1, cs2.getRest());
-                if (call1.length() > call2.length()) return call1;
+                if (call1.length() >= call2.length()) return call1;
                 else                                 return call2;
             }
         }catch (EmptyListE e) {
@@ -273,7 +273,7 @@ class DP {
             } else {
                 List<Character> call1 = mlcs(cs1.getRest(), cs2);
                 List<Character> call2 = mlcs(cs1, cs2.getRest());
-                if (call1.length() > call2.length()) sequence = call1;
+                if (call1.length() >= call2.length()) sequence = call1;
                 else                                 sequence = call2;
             }
         }catch (EmptyListE e) {
