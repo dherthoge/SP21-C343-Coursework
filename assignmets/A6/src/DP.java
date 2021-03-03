@@ -245,7 +245,7 @@ class DP {
     static List<Character> lcs (List<Character> cs1, List<Character> cs2) {
 
         try {
-            if (cs1.getFirst() == cs2.getFirst()) {
+            if (cs1.getFirst().equals(cs2.getFirst())) {
                 return new Node<>(cs1.getFirst(), lcs(cs1.getRest(), cs2.getRest()));
             } else {
                 List<Character> call1 = lcs(cs1.getRest(), cs2);
@@ -268,7 +268,7 @@ class DP {
         List<Character> sequence;
 
         try {
-            if (cs1.getFirst() == cs2.getFirst()) {
+            if (cs1.getFirst().equals(cs2.getFirst())) {
                 return new Node<>(cs1.getFirst(), mlcs(cs1.getRest(), cs2.getRest()));
             } else {
                 List<Character> call1 = mlcs(cs1.getRest(), cs2);
