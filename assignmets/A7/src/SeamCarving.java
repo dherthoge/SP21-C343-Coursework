@@ -137,7 +137,11 @@ public class SeamCarving {
 
         // See if the subproblem has already been computed
         Position probKey = new Position(h, w);
-        if (hash.containsKey(probKey)) return hash.get(probKey);
+        if (hash.containsKey(probKey)) {
+
+            System.out.println("get");
+            return hash.get(probKey);
+        }
 
         // Compute the energy at the current position
         int curPixelEnergy = computeEnergy(h, w);
@@ -172,7 +176,7 @@ public class SeamCarving {
         }
     }
 
-    // Call findSeam for all position ins the first row (h=0)
+    // Call findSeam for all position in the first row (h=0)
     // and returns the best (the one with the lowest
     // total energy)
     //
@@ -182,7 +186,18 @@ public class SeamCarving {
     // hashtable
 
     Pair<List<Position>, Integer> bestSeam() {
-        return null; // TODO
+
+        Pair<List<Position>, Integer> minSeam = findSeam(0, 0);
+//        System.out.println("0 of " + width);
+        for (int i = 1; i < width; i++) {
+            //System.out.printf("     %d of %d in SeamCarving.bestSeam()%n", i+1, width);
+            hash.clear();
+            Pair<List<Position>, Integer> curSeam = findSeam(0, i);
+            if (curSeam.getSecond() < minSeam.getSecond()) minSeam = curSeam;
+//            System.out.println(i + " of " + width);
+        }
+
+        return minSeam;
     }
 
     // Putting it all together; find best seam and copy pixels
@@ -193,7 +208,40 @@ public class SeamCarving {
     // the ones in the seam
 
     void cutSeam() {
-      // TODO
+
+        // Find the pixels to cut
+        Pair<List<Position>, Integer> bestSeam = bestSeam();
+        List<Position> pixelsToCut = bestSeam.getFirst();
+
+        // Set up a new array to store the cut image
+        int[] newPixels = new int[(width-1)*height];
+
+        // Keep a separate counter for the new image since it's length will be different than the
+        // cut image
+        int j = 0;
+        for (int i = 0; i < pixels.length; i++) {
+
+            try {
+                // If the current pixel being copied is the first node in bestSeam, don't copy it and
+                // remove the node from bestSeam
+                if (pixelsToCut.getFirst().getSecond() == i%width) {
+                    pixelsToCut = pixelsToCut.getRest();
+                }
+                // Since the current pixel shouldn't be deleted, add it to the new image and
+                // increment the new image counter (j)
+                else {
+                    newPixels[j] = pixels[i];
+                    j += 1;
+                }
+            } catch (EmptyListE e) {
+                newPixels[j] = pixels[i];
+                j += 1;
+            }
+        }
+
+        // Set the image as the cut image
+        pixels = newPixels;
+        width = width - 1;
     }
 }
 

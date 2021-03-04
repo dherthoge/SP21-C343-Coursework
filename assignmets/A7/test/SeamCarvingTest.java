@@ -291,24 +291,24 @@ public class SeamCarvingTest {
         }
     }
 
-    // My Tests
-
+    // My tests
+    @Test
+    public void smallLineCutTest () throws IOException {
+        SeamCarving sc = new SeamCarving();
+        sc.readImage("small-line.jpg");
+        sc.cutSeam();
+        sc.writeImage("small-line-cut.jpg");
+    }
 
     @Test
-    public void boardFindSeam () throws IOException {
+    // !!!!!1IMPORTANT NEED TO CHANGE jpg TO png IN SeamCarving.writeImage IN ORDER TO PROPERLY
+    // WRITE boardCut. You cannot (at least I haven't found a way) to mix and match file types
+    // when reading and writing
+    public void boardCutTest () throws IOException {
         SeamCarving sc = new SeamCarving();
-        sc.hash.clear();
         sc.readImage("board.png");
-        Pair<List<Position>, Integer> r = sc.findSeam(0,0);
-        System.out.println("hi");
-//        assertEquals(0, (int) r.getSecond());
-//        try {
-//            List<Position> seam = r.getFirst();
-//            for (int i=0; i<21; i++) {
-//                assertEquals(new Position(i, 0), seam.getFirst());
-//                seam = seam.getRest();
-//            }
-//        }
-//        catch (EmptyListE ignored) {}
+        sc.cutSeam();
+        sc.writeImage("boardCut.png");
     }
+
 }
