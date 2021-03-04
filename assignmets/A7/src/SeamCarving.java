@@ -138,8 +138,7 @@ public class SeamCarving {
         // See if the subproblem has already been computed
         Position probKey = new Position(h, w);
         if (hash.containsKey(probKey)) {
-
-            System.out.println("get");
+//            System.out.println("get" + " " + h + " " + w);
             return hash.get(probKey);
         }
 
@@ -172,6 +171,7 @@ public class SeamCarving {
             Pair<List<Position>, Integer> returnSeam = new Pair<>(new Node<>(probKey, minEnergyBelow.getFirst()),
                     curPixelEnergy+ minEnergyBelow.getSecond());
             hash.put(probKey, returnSeam);
+//            System.out.println("put" + " " + h + " " + w);
             return returnSeam;
         }
     }
@@ -187,14 +187,13 @@ public class SeamCarving {
 
     Pair<List<Position>, Integer> bestSeam() {
 
+        hash.clear();
         Pair<List<Position>, Integer> minSeam = findSeam(0, 0);
-//        System.out.println("0 of " + width);
         for (int i = 1; i < width; i++) {
-            //System.out.printf("     %d of %d in SeamCarving.bestSeam()%n", i+1, width);
-            hash.clear();
+//            System.out.println("new seam " +
+//                    "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             Pair<List<Position>, Integer> curSeam = findSeam(0, i);
             if (curSeam.getSecond() < minSeam.getSecond()) minSeam = curSeam;
-//            System.out.println(i + " of " + width);
         }
 
         return minSeam;
@@ -221,6 +220,12 @@ public class SeamCarving {
         int j = 0;
         for (int i = 0; i < pixels.length; i++) {
 
+            // If there are no more pixels to be cut, finish copying the pixels
+            if (pixelsToCut instanceof Empty) {
+                newPixels[j] = pixels[i];
+                j += 1;
+            }
+
             try {
                 // If the current pixel being copied is the first node in bestSeam, don't copy it and
                 // remove the node from bestSeam
@@ -233,10 +238,7 @@ public class SeamCarving {
                     newPixels[j] = pixels[i];
                     j += 1;
                 }
-            } catch (EmptyListE e) {
-                newPixels[j] = pixels[i];
-                j += 1;
-            }
+            } catch (EmptyListE e) {}
         }
 
         // Set the image as the cut image
