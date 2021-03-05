@@ -240,8 +240,7 @@ public class SeamCarvingTest {
     public void cutBigSunHalf () throws IOException {
         SeamCarving sc = new SeamCarving();
         sc.readImage("winter-sun.jpg");
-        int bound = 10;
-//        int bound = sc.getWidth() / 2;
+        int bound = sc.getWidth() / 2;
         for (int i=0; i<bound; i++) {
             System.out.printf("%d of %d%n", i+1, bound);
             sc.cutSeam();

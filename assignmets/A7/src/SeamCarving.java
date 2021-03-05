@@ -190,9 +190,7 @@ public class SeamCarving {
         hash.clear();
         Pair<List<Position>, Integer> minSeam = findSeam(0, 0);
         for (int i = 1; i < width; i++) {
-//            System.out.println("new seam " +
-//                    "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-            Pair<List<Position>, Integer> curSeam = findSeam(0, i);
+          Pair<List<Position>, Integer> curSeam = findSeam(0, i);
             if (curSeam.getSecond() < minSeam.getSecond()) minSeam = curSeam;
         }
 
@@ -215,15 +213,6 @@ public class SeamCarving {
         // Set up a new array to store the cut image
         int[] newPixels = new int[(width-1)*height];
 
-//        while (!(pixelsToCut instanceof Empty)) {
-//
-//            try {
-//                pixels[pixelsToCut.getFirst().getFirst()*width+pixelsToCut.getFirst().getSecond()]=
-//                        0;
-//                pixelsToCut = pixelsToCut.getRest();
-//            } catch (EmptyListE ignore) {}
-//        }
-
         boolean hasCutInLine = false;
 
         // Keep a separate counter for the new image since it's length will be different than the
@@ -232,10 +221,7 @@ public class SeamCarving {
         for (int i = 0; i < pixels.length; i++) {
 
             if (hasCutInLine == true && i%width == 0) hasCutInLine = false;
-//            if (pixels[i] != 0) {
-//                newPixels[j] = pixels[i];
-//                j += 1;
-//            }
+
             // If there are no more pixels to be cut, finish copying the pixels
             if (pixelsToCut instanceof Empty) {
                 newPixels[j] = pixels[i];
@@ -246,7 +232,7 @@ public class SeamCarving {
             try {
                 // If the current pixel being copied is the first node in bestSeam, don't copy it and
                 // remove the node from bestSeam
-                if (pixelsToCut.getFirst().getSecond() == i%width /*&& !hasCutInLine*/) {
+                if (pixelsToCut.getFirst().getSecond() == i%width && !hasCutInLine) {
                     pixelsToCut = pixelsToCut.getRest();
                     hasCutInLine = true;
                 }
