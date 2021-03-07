@@ -211,8 +211,7 @@ public class SeamCarvingTest {
     public void cutBigBalloonTwoThirds () throws IOException {
         SeamCarving sc = new SeamCarving();
         sc.readImage("balloon-sky.jpg");
-        int bound = 10;
-//        int bound = sc.getWidth() * 2 / 3;
+        int bound = sc.getWidth() * 2 / 3;
         long t0 = System.currentTimeMillis();
         long t;
         for (int i=0; i<bound; i++) {
