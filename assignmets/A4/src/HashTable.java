@@ -102,7 +102,6 @@ abstract class HashTable<K,V> {
 
         // If the key value pair is already there, do not do anything further
         if (!slots.get(hash).equals(Optional.empty())) {
-            Boolean fuck = slots.get(hash).get().getKey().equals(key);
             if (slots.get(hash).get().getKey().equals(key)) {
                 return;
             }
