@@ -197,13 +197,13 @@ abstract class HashTable<K,V> {
     // -------------------------------------------------------
 
     // to rehash, we will perform the following actions:
-    // - +calculate a new capacity as follows:
+    // - calculate a new capacity as follows:
     //   BigInteger.valueOf(oldCapacity*2L).nextProbablePrime().intValue();
     //   this will ensure that capacity is always a prime number
     // - create a new array of the new capacity
     // - enter a loop that takes every item in the old array
     //   and inserts it in the new array
-    // - +replace the old array by the new one and clear the
+    // - replace the old array by the new one and clear the
     //   collection of deleted indices
     void rehash () {
         // TODO

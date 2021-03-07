@@ -56,7 +56,7 @@ public class Sort {
      * 3. For each gap, do an insertion sort for the elements separated
      *    by the given gap
      */
-    static List<Integer> shellSort (List<Integer> ns) {
+    static List<Integer> shellSort (List<Integer> ns)  {
 
         List<Integer> copiedList = new ArrayList<>(ns);
 

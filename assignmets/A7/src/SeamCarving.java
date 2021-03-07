@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -137,10 +138,7 @@ public class SeamCarving {
 
         // See if the subproblem has already been computed
         Position probKey = new Position(h, w);
-        if (hash.containsKey(probKey)) {
-//            System.out.println("get" + " " + h + " " + w);
-            return hash.get(probKey);
-        }
+        if (hash.containsKey(probKey)) return hash.get(probKey);
 
         // Compute the energy at the current position
         int curPixelEnergy = computeEnergy(h, w);
@@ -153,25 +151,26 @@ public class SeamCarving {
         // Since the current pixel is not at the bottom, find the pixel below with the smallest energy
         else {
 
-            // Create an array to hold the seams of the neighbors below
-            ArrayList<Pair<List<Position>, Integer>> seamsBelow = new ArrayList<>();
-            // Populate seamsBelow with the seams of the neighbors below
-            for (Position p : belowNeighbors) {
-                seamsBelow.add(findSeam(p.getFirst(), p.getSecond()));
-            }
+            // Set the seam with the minimum amount of energy as the left-most neighbor
+            Pair<List<Position>, Integer> minEnergyBelow =
+                    findSeam(belowNeighbors.get(0).getFirst(), belowNeighbors.get(0).getSecond());
 
-            // Find the seam with the minimum amount of energy
-            Pair<List<Position>, Integer> minEnergyBelow = seamsBelow.get(0);
-            for (int i = 1; i < seamsBelow.size(); i++) {
-                if (seamsBelow.get(i).getSecond() < minEnergyBelow.getSecond())
-                minEnergyBelow = seamsBelow.get(i);
+            // For every other neighbor, compute their energy and determine if they are less than
+            // the current minimum amount of energy
+            for (int i = 1; i < belowNeighbors.size(); i++) {
+
+                Pair<List<Position>, Integer> possibleMinEnergyBelow =
+                        findSeam(belowNeighbors.get(i).getFirst(),
+                                belowNeighbors.get(i).getSecond());
+
+                if (possibleMinEnergyBelow.getSecond() < minEnergyBelow.getSecond())
+                minEnergyBelow = possibleMinEnergyBelow;
             }
 
             // Put the answer to the subproblem in the hash table and return the answer
             Pair<List<Position>, Integer> returnSeam = new Pair<>(new Node<>(probKey, minEnergyBelow.getFirst()),
                     curPixelEnergy+ minEnergyBelow.getSecond());
             hash.put(probKey, returnSeam);
-//            System.out.println("put" + " " + h + " " + w);
             return returnSeam;
         }
     }
@@ -190,7 +189,7 @@ public class SeamCarving {
         hash.clear();
         Pair<List<Position>, Integer> minSeam = findSeam(0, 0);
         for (int i = 1; i < width; i++) {
-          Pair<List<Position>, Integer> curSeam = findSeam(0, i);
+            Pair<List<Position>, Integer> curSeam = findSeam(0, i);
             if (curSeam.getSecond() < minSeam.getSecond()) minSeam = curSeam;
         }
 

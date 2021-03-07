@@ -80,10 +80,13 @@ public class DPTest {
     @Test
     public void minDistance() {
         List<DP.BASE> dna1 =
-                new Node<>(DP.BASE.A, new Node<>(DP.BASE.C, new Empty<>()));
+                new Node<>(DP.BASE.A, new Node<>(DP.BASE.G, new Node<>(DP.BASE.T,
+                        new Node<>(DP.BASE.G, new Node<>(DP.BASE.A, new Node<>(DP.BASE.C,
+                                new Empty<>()))))));
         List<DP.BASE> dna2 =
-                new Node<>(DP.BASE.A, new Node<>(DP.BASE.G, new Empty<>()));
-        assertEquals(1, DP.minDistance(dna1, dna2));
+                new Node<>(DP.BASE.G, new Node<>(DP.BASE.A, new Node<>(DP.BASE.T,
+                        new Node<>(DP.BASE.A, new Node<>(DP.BASE.G, new Empty<>())))));
+        assertEquals(5, DP.minDistance(dna1, dna2));
     }
 
     @Test
@@ -109,6 +112,8 @@ public class DPTest {
                                 new Node<>('A', new Empty<>()))))));
         List<Character> c = new Node<>('B', new Node<>('D',
                 new Node<>('A', new Node<>('B', new Empty<>()))));
+        List<Character> c1 = new Node<>('B', new Node<>('B',
+                new Node<>('A' , new Node<>('D', new Empty<>()))));
         assertEquals(c, DP.lcs(cs1, cs2));
     }
 
