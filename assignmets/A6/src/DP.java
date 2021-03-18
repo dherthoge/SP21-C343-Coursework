@@ -1,5 +1,7 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 class DP {
 
@@ -226,6 +228,47 @@ class DP {
         return penalty;
     }
 
+    // helper to convert our List class to an ArrayList
+    // OR you can use our List class's .get() method
+    // converting would be more efficient... can you see why :)
+    static <E> ArrayList<E> toArray (List<E> ls) {
+        ArrayList<E> converted = new ArrayList<>();
+        try {
+            converted.add(ls.getFirst());
+            converted.addAll(toArray(ls.getRest()));
+            return converted;
+        } catch (EmptyListE e) {
+            return converted;
+        }
+    }
+
+    static int buMinDistance (List<BASE> dna1, List<BASE> dna2) {
+
+        ArrayList<BASE> dna1ArrList = toArray(dna1);
+        ArrayList<BASE> dna2ArrList = toArray(dna2);
+
+        int rows = dna1ArrList.size()+1;
+        int cols = dna2ArrList.size()+1;
+        int[][] table = new int[rows][cols];
+
+        for (int i = 0; i < rows; i++) table[i][0] = i*2;
+        for (int j = 0; j < cols; j++) table[0][j] = j*2;
+
+        for (int i = 1; i < rows; i++) {
+            BASE dna1Base = dna1ArrList.get(rows-1-i);
+            for (int j = 1; j < cols; j++) {
+                BASE dna2Base = dna2ArrList.get(cols-1-j);
+
+                int top = table[i-1][j] + 2;
+                int left = table[i][j-1] + 2;
+                int diag = dna1Base.equals(dna2Base) ? table[i-1][j-1] : table[i-1][j-1]+1;
+                table[i][j] = Math.min(top, Math.min(left, diag));
+            }
+        }
+
+        return table[rows-1][cols-1];
+    }
+
     // -----------------------------------------------------------------------------
     // Longest common subsequence ...
     // -----------------------------------------------------------------------------
@@ -283,5 +326,41 @@ class DP {
         lcsMemo.put(probKey,sequence);
 
         return sequence;
+    }
+
+    static List<Character> buLcs (List<Character> cs1, List<Character> cs2) {
+
+        ArrayList<Character> cs1ArrList = toArray(cs1);
+        ArrayList<Character> cs2ArrList = toArray(cs2);
+
+        int rows = cs1ArrList.size()+1;
+        int cols = cs2ArrList.size()+1;
+        ArrayList<Character>[][] table = new ArrayList[rows][cols];
+
+        for (int i = 0; i < rows; i++) table[i][0] = new ArrayList<>();
+        for (int j = 0; j < cols; j++) table[0][j] = new ArrayList<>();
+
+        for (int i = 1; i < rows; i++) {
+            char cs1Char = cs1ArrList.get(rows-1-i);
+            for (int j = 1; j < cols; j++) {
+                char cs2Char = cs2ArrList.get(cols-1-j);
+
+                if (cs1Char == cs2Char) {
+                    table[i][j] = new ArrayList<>(table[i-1][j-1]);
+                    table[i][j].add(cs1Char);
+                }
+                else if (table[i-1][j].size() >= table[i][j-1].size())
+                    table[i][j] = new ArrayList<>(table[i-1][j]);
+                else
+                    table[i][j] = new ArrayList<>(table[i][j-1]);
+            }
+        }
+
+        ArrayList<Character> outputArrList = table[rows-1][cols-1];
+        List<Character> outputList = new Empty<>();
+        for (int i = 0; i < outputArrList.size(); i++) {
+            outputList = outputList.add(outputArrList.get(i));
+        }
+        return outputList.reverse();
     }
 }

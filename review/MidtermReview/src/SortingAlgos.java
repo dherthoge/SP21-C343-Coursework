@@ -36,13 +36,21 @@ public class SortingAlgos {
 
 
 
-        ArrayList<Integer> shellSortSorted = (ArrayList<Integer>) shellSort(unsorted);
+        ArrayList<Integer> shell = new ArrayList<>();
+        shell.add(7);
+        shell.add(2);
+        shell.add(3);
+        shell.add(6);
+        shell.add(9);
+        shell.add(4);
+        shell.add(1);
+        shell.add(0);
+        shell.add(8);
+        shell.add(5);
+        ArrayList<Integer> shellSortSorted = (ArrayList<Integer>) shellSort(shell);
         lastInt = shellSortSorted.get(0);
-        for (int i = 1; i < shellSortSorted.size(); i++) {
-            if (lastInt>shellSortSorted.get(i)) {
-                System.out.println("shellSort is wrong");
-                return;
-            }
+        for (int i = 0; i < shellSortSorted.size(); i++) {
+            System.out.println(shellSortSorted.get(i));
         }
 
 
@@ -157,6 +165,8 @@ public class SortingAlgos {
         ArrayList<Integer> copiedList = (ArrayList<Integer>) list;
 
         ArrayList<Integer> gapSequence = (ArrayList<Integer>) findGapSequence(list.size());
+        gapSequence.clear();
+        gapSequence.add(5);
 
         for (int k = gapSequence.size()-1; k >= 0; k--) {
 

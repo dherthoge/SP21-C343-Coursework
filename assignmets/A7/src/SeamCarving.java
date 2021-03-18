@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-public class SeamC {
+public class SeamCarving {
     private int[] pixels;
     private int type, height, width;
 

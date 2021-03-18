@@ -98,6 +98,18 @@ public class DPTest {
         assertEquals(337, DP.mminDistance(dna1, dna2));
     }
 
+    @Test
+    public void buMinDistance() {
+        List<DP.BASE> dna1 =
+                new Node<>(DP.BASE.A, new Node<>(DP.BASE.G, new Node<>(DP.BASE.T,
+                        new Node<>(DP.BASE.G, new Node<>(DP.BASE.A, new Node<>(DP.BASE.C,
+                                new Empty<>()))))));
+        List<DP.BASE> dna2 =
+                new Node<>(DP.BASE.G, new Node<>(DP.BASE.A, new Node<>(DP.BASE.T,
+                        new Node<>(DP.BASE.A, new Node<>(DP.BASE.G, new Empty<>())))));
+        assertEquals(5, DP.buMinDistance(dna1, dna2));
+    }
+
     // longest common subsequence
 
     @Test
@@ -124,6 +136,23 @@ public class DPTest {
         List<Character> cs1 = List.MakeList(g, 310);
         List<Character> cs2 = List.MakeList(g, 250);
         assertEquals(240, DP.mlcs(cs1, cs2).length());
+    }
+
+    @Test
+    public void buLcs() {
+        List<Character> cs1 =
+                new Node<>('A', new Node<>('B', new Node<>('C',
+                        new Node<>('B', new Node<>('D', new Node<>('A',
+                                new Node<>('B', new Empty<>())))))));
+        List<Character> cs2 =
+                new Node<>('B', new Node<>('D', new Node<>('C',
+                        new Node<>('A', new Node<>('B',
+                                new Node<>('A', new Empty<>()))))));
+        List<Character> c = new Node<>('B', new Node<>('D',
+                new Node<>('A', new Node<>('B', new Empty<>()))));
+        List<Character> c1 = new Node<>('B', new Node<>('B',
+                new Node<>('A' , new Node<>('D', new Empty<>()))));
+        assertEquals(c, DP.buLcs(cs1, cs2));
     }
 
     // My minDistanceTests
