@@ -264,10 +264,12 @@ class Node extends Tree {
     Tree insert (int v) {
         Tree newTree = new Node(this.value, this.leftTree.insert(v), this.rightTree);
 
-         try {
-             newTree = new Node(newTree.getValue(), newTree.getRightTree(), newTree.getLeftTree());
-         } catch (EmptyE e) {}
-         return newTree;
+        // Must duplicate the mirror() logic, but we don't want the mirror to run down the tree
+        // every time bc mirror is recursive, just want it to mirror the current level
+        try {
+            newTree = new Node(newTree.getValue(), newTree.getRightTree(), newTree.getLeftTree());
+        } catch (EmptyE e) {}
+        return newTree;
     }
 
     int numberMaxPaths() {
