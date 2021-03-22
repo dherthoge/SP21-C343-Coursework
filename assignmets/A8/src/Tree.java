@@ -126,36 +126,42 @@ abstract class Tree implements TreePrinter.PrintableNode {
      */
     static ArrayList<ArrayList<Integer>> BFSLevel (Tree t)  {
 
+        // Add the first node to the tree
         ArrayList<ArrayList<Integer>> result = new ArrayList<>();
         result.add(new ArrayList<>());
 
         Queue<Tree> queue = new LinkedList<>();
         queue.add(t);
 
-        int level = 0;
-        int counter = 0;
-        int intsInLevel = 1;
+        // Check to see if we have nodes left
         while (!queue.isEmpty()) {
-            try {
-                Tree ct = queue.remove();
-                result.get(level).add(ct.getValue());
-                queue.add(ct.getLeftTree());
-                queue.add(ct.getRightTree());
+
+            // Count the number of nodes at this level
+            int nodesInLine = queue.size();
+
+            // For the nodes in this level
+            while (nodesInLine>0) {
+
+                // Remove the current node, add it's data to the result, and add it's childrent
+                // to the next level in the queue
+                try {
+                    Tree ct = queue.remove();
+                    result.get(result.size() - 1).add(ct.getValue());
+                    queue.add(ct.getLeftTree());
+                    queue.add(ct.getRightTree());
+                } catch (EmptyE ignored) {}
+
+                // Decrement the number of nodes in the level
+                nodesInLine--;
             }
-            catch (EmptyE ignored) {}
-            counter++;
-            if (counter%intsInLevel == 0) {
-                result.add(new ArrayList<>());
-                level++;
-                counter = 0;
-                intsInLevel *= 2;
-            }
+
+            // The level has no more nodes, create a new ArrayList in result to hold the next line
+            result.add(new ArrayList<>());
         }
 
-        for (int i = result.size()-1; i >= 0; i--) {
-
-            if (result.get(i).isEmpty())   result.remove(i);
-        }
+        // Remove the last two layers of the list since there are no more nodes
+        result.remove(result.size()-1);
+        result.remove(result.size()-1);
 
         return result;
     }
@@ -165,6 +171,10 @@ abstract class Tree implements TreePrinter.PrintableNode {
         for (int v : vs) t = t.insert(v);
         return t;
     }
+
+    // Debugging methods
+
+    public abstract Tree badInsert(int v);
 }
 
 class Empty extends Tree {
@@ -212,6 +222,12 @@ class Empty extends Tree {
     public TreePrinter.PrintableNode getLeft() { return null; }
     public TreePrinter.PrintableNode getRight() { return null; }
     public String getText() { return null; }
+
+    // Debugging methods
+
+    public Tree badInsert(int v) {
+        return new Node(v, new Empty(), new Empty());
+    }
 }
 
 class Node extends Tree {
@@ -242,14 +258,16 @@ class Node extends Tree {
     }
 
     Tree mirror() {
-        return new Node(this.value, this.rightTree, this.leftTree);
+        return new Node(this.value, this.rightTree.mirror(), this.leftTree.mirror());
     }
 
-    // TODO insert might be wrong, but I'm pretty sure it's right. I think the lecture notes are
-    //  wrong
     Tree insert (int v) {
         Tree newTree = new Node(this.value, this.leftTree.insert(v), this.rightTree);
-        return newTree.mirror();
+
+         try {
+             newTree = new Node(newTree.getValue(), newTree.getRightTree(), newTree.getLeftTree());
+         } catch (EmptyE e) {}
+         return newTree;
     }
 
     int numberMaxPaths() {
@@ -274,16 +292,15 @@ class Node extends Tree {
         int maxSubDiameter = Math.max(this.leftTree.diameter(), this.rightTree.diameter());
 
         // Calculate the heights of the subtrees combined
-        int heightLR = this.leftTree.height() + this.rightTree.height();
+        int heightLR = this.leftTree.height()+1 + this.rightTree.height()+1;
 
         // If the heightLR is >= the maxSubDiameter, then the larges diameter is through the
         // current node
-        if (heightLR >= maxSubDiameter) return heightLR+1;
-        else return maxSubDiameter;
+        return Math.max(maxSubDiameter, heightLR);
     }
 
     Tree map (Function<Integer,Integer> f) {
-        return new Node(f.apply(this.value), this.leftTree.map(f), this.rightTree.map(f)); // TODO
+        return new Node(f.apply(this.value), this.leftTree.map(f), this.rightTree.map(f));
     }
 
     int reduce (int base, TriFunction<Integer,Integer,Integer,Integer> f) {
@@ -300,4 +317,11 @@ class Node extends Tree {
     }
 
     public String getText() { return String.valueOf(value); }
+
+    // Debugging methods
+
+    public Tree badInsert(int v) {
+        Tree newTree = new Node(this.value, this.leftTree.badInsert(v), this.rightTree);
+        return newTree;
+    }
 }

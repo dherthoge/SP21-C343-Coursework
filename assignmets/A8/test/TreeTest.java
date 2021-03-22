@@ -16,9 +16,9 @@ class TreeTest {
         t5 = Tree.fromArray(new int[]{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15});
         t6 = new Node(0, new Node(-1, new Empty(), new Empty()), t5);
 
-        TreePrinter.print(t1);
-        TreePrinter.print(t2);
-        TreePrinter.print(t3);
+//        TreePrinter.print(t1);
+//        TreePrinter.print(t2);
+//        TreePrinter.print(t3);
         TreePrinter.print(t4);
         TreePrinter.print(t5);
         TreePrinter.print(t6);
@@ -26,9 +26,9 @@ class TreeTest {
         assertEquals(4, t4.height());
         assertEquals(2, t4.numberMaxPaths());
         assertEquals(16, t5.numberMaxPaths());
-        assertEquals(6, t4.diameter());
-        assertEquals(7, t5.diameter());
-        assertEquals(7, t6.diameter());
+        assertEquals(7, t4.diameter());
+        assertEquals(8, t5.diameter());
+        assertEquals(8, t6.diameter());
         assertEquals(215, t4.reduce(0, (a,b,c) -> a+b+c));
         assertEquals(170, t4.maxSum());
     }
@@ -95,4 +95,56 @@ class TreeTest {
         System.out.print("]");
     }
 
+    @Test
+    public void mirrorComplex() {
+        Tree t1 = new Empty();
+        for (int i = 0; i < 30; i++) {
+            t1 = t1.insert(i);
+            TreePrinter.print(t1);
+        }
+    }
+
+    @Test
+    public void insertComplex() {
+        Tree t1 = new Empty();
+        for (int i = 0; i < 10; i++) {
+            t1 = t1.insert(i);
+            TreePrinter.print(t1);
+        }
+    }
+
+    @Test
+    public void BFSLevelImbalanced() {
+        Tree t1 = new Empty();
+        for (int i = 0; i < 30; i++) {
+            t1 = t1.badInsert(i);
+        }
+
+        Tree t2 = new Empty();
+        for (int i = 0; i < 30; i++) {
+            t2 = t2.insert(i);
+        }
+
+        ArrayList<ArrayList<Integer>> t1ArrList = Tree.BFSLevel(t1);
+        System.out.print("t1ArrList: [");
+        for (ArrayList<Integer> arrList: t1ArrList) {
+            System.out.print("[");
+            for (Integer i: arrList) {
+                System.out.print(i + ", ");
+            }
+            System.out.print("done]; ");
+        }
+        System.out.print("]\n\n");
+
+        ArrayList<ArrayList<Integer>> t2ArrList = Tree.BFSLevel(t2);
+        System.out.print("t2ArrList: [");
+        for (ArrayList<Integer> arrList: t2ArrList) {
+            System.out.print("[");
+            for (Integer i: arrList) {
+                System.out.print(i + ", ");
+            }
+            System.out.print("done]; ");
+        }
+        System.out.print("]");
+    }
 }
