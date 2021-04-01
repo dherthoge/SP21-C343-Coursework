@@ -124,6 +124,7 @@ public class AVLTest {
         avl = avl.insert(10);
         assertEquals(0,AVL.getRotations());
 
+        TreePrinter.print(avl);
         AVL<Integer> avl2 = avl.delete(35);
         assertEquals(1,AVL.getRRotations());
         assertEquals(0,AVL.getLRotations());
@@ -188,15 +189,43 @@ public class AVLTest {
 
     @Test
     public void AVLextractLeftMost() throws EmptyAVLE {
-        AVL.resetRotations();
-        List<Integer> nums = IntStream.range(0, 5).boxed().collect(Collectors.toList());
-        Collections.shuffle(nums, new Random(10));
-        AVL<Integer> avl = new Empty<>();
-        for (int i : nums) avl = avl.insert(i);
+
+        AVL<Integer> avl = new Node<>(7, new Node<>(3, new Node<>(6, new Node<>(10, new Empty<>()
+                , new Empty<>()), new Node<>(15, new Node<>(18, new Empty<>(), new Empty<>()),
+                new Empty<>())), new Node<>(7, new Empty<>(), new Empty<>())),
+                new Node<>(70,
+                new Empty<>(),
+                new Node<>(80, new Empty<>(), new Empty<>())));
+
         TreePrinter.print(avl);
 
-        Pair<Integer, AVL<Integer>> output = avl.extractLeftMost();
-        System.out.println(output);
+//        TreePrinter.print(avl);
+//        avl = avl.rotateRight();
+////        TreePrinter.print(avl);
+//        avl = avl.rotateRight();
+////        TreePrinter.print(avl);
+//        avl = avl.rotateRight();
+////        TreePrinter.print(avl);
+//
+//
+//        avl = (Node<Integer>) avl.right();
+//        TreePrinter.print(avl);
+//
+//
+//        avl = avl.rotateLeft();
+//        TreePrinter.print(avl);
+//        avl = avl.rotateLeft();
+//        TreePrinter.print(avl);
+
+        Pair<Integer, AVL<Integer>> call1 = avl.extractLeftMost();
+        avl = call1.getSecond();
+        System.out.println(call1.getFirst());
+        TreePrinter.print(call1.getSecond());
+        Pair<Integer, AVL<Integer>> call2 = avl.extractLeftMost();
+        System.out.println(call2.getFirst());
+        TreePrinter.print(call2.getSecond());
+//        TreePrinter.print(avl.findLeftMost());
+
 //        Empty<Integer> empty = new Empty<>();
 //        TreePrinter.print(new Node<>(2, new Node<>(1, empty, empty), new Node<>(4,
 //                new Node<>(3, empty, empty), empty)));

@@ -194,8 +194,8 @@ class Node<E extends Comparable<E>> extends AVL<E> {
      * by incrementing Rrotations.
      */
     Node<E> rotateRight() {
-        Rrotations++;
         assert !left.isEmpty();
+        Rrotations++;
 
         AVL<E> balancedAVL = new Empty();
         try {
@@ -210,8 +210,8 @@ class Node<E extends Comparable<E>> extends AVL<E> {
      * This is the symmetric case of rotateRight
      */
     Node<E> rotateLeft() {
-        Lrotations++;
         assert !right.isEmpty();
+        Lrotations++;
 
         AVL<E> balancedAVL = new Empty();
         try {
@@ -277,15 +277,28 @@ class Node<E extends Comparable<E>> extends AVL<E> {
      */
     AVL<E> delete(E key) {
 
+        AVL<E> treeWithoutKey;
         if (key.compareTo(this.data) < 0) {
-            Node<E> treeWithoutKey = new Node<>(this.data, this.left.delete(key), this.right);
+            // If this is larger than the given key
+            treeWithoutKey = balance(this.data, this.left.delete(key), this.right);
         }
         else if (key.compareTo(this.data) > 0) {
-            Node<E> treeWithoutKey = new Node<>(this.data, this.left, this.right.delete(key));
+            treeWithoutKey = balance(this.data, this.left, this.right.delete(key));
         }
-        else {}
+        else {
+            try {
+                Pair<E, AVL<E>> replacement = this.right.extractLeftMost();
+                // try to replace this with the leftMostChild
+                treeWithoutKey = balance(replacement.getFirst(), this.left,
+                        replacement.getSecond());
+                TreePrinter.print(treeWithoutKey);
+            } catch (EmptyAVLE e) {
+                // if this.right is empty, then we just return the left subtree
+                treeWithoutKey = this.left;
+            }
+        }
 
-        return null; // TODO
+        return treeWithoutKey;
     }
 
     /**
@@ -306,13 +319,13 @@ class Node<E extends Comparable<E>> extends AVL<E> {
      * unbalanced, it would be balanced before returning it.
      */
     Pair<E, AVL<E>> extractLeftMost() {
-
-        if (this.left.isEmpty()) {
-            if (this.right.isEmpty()) return new Pair<>(this.data, new Empty<>());
-            else return new Pair<>(this.data, this.right);
+        try {
+            Pair<E, AVL<E>> recursiveCall = this.left.extractLeftMost();
+            return new Pair<>(recursiveCall.getFirst(), balance(this.data,
+                    recursiveCall.getSecond(), this.right));
+        } catch (EmptyAVLE e) {
+            return new Pair<>(this.data, right);
         }
-        else return new Pair<>(this.extractLeftMost().getFirst(), new Node<>(this.data,
-                this.extractLeftMost().getSecond(), this.right));
     }
 
     //--------------------------
