@@ -22,24 +22,16 @@ class SudokuTest {
     }
 
     @Test
-    public void run1 () throws FileNotFoundException {
-        run(1);
-    }
+    public void run1 () throws FileNotFoundException { run(1); }
 
     @Test
-    public void run2 () throws FileNotFoundException {
-        run(2);
-    }
+    public void run2 () throws FileNotFoundException { run(2); }
 
     @Test
-    public void run3 () throws FileNotFoundException {
-        run(3);
-    }
+    public void run3 () throws FileNotFoundException { run(3); }
 
     @Test
-    public void run4 () throws FileNotFoundException {
-        run(4);
-    }
+    public void run4 () throws FileNotFoundException { run(4); }
 
     @Test
     public void runAll () throws FileNotFoundException {
