@@ -54,7 +54,6 @@ class Sudoku {
     boolean solve () {
 
         return tryColumn(0);
-        // TODO
     }
 
     boolean tryColumn (int col) {
@@ -72,36 +71,35 @@ class Sudoku {
                 // column
                 if (isValid(val, row, col)) {
                     cells[col][row] = val;
-                    if (col < 8) {
-                        boolean worked = tryCell(col + 1, row);
-                        if (worked) return worked;
+                    if (row < 8) {
+                        boolean solved = tryCell(col, row + 1);
+                        if (solved) return solved;
                     }
-                    else if (row < 8) {
-                        boolean worked = tryCell(0, row+1);
-                        if (worked) return worked;
+                    else if (col < 8) {
+                        boolean solved = tryCell(col + 1, 0);
+                        if (solved) return solved;
                     }
                     else return true;
+
                     cells[col][row] = -1;
                     backtracking++;
                 }
             }
         } else {
 
-            if (col == 8 && row == 8) {
-                return true;
+            if (row < 8) {
+                boolean solved = tryCell(col, row + 1);
+                if (solved) return solved;
             }
-            if (col == 8) {
-                boolean worked = tryCell(0, row+1);
-                if (worked) return worked;
+            else if (col < 8) {
+                boolean solved = tryCell(col + 1, 0);
+                if (solved) return solved;
             }
-            else {
-                boolean worked = tryCell(col+1, row);
-                if (worked) return worked;
-            }
+            else return true;
         }
 
         // Since no value was valid, return false
-        return false; // TODO
+        return false;
     }
 
     public String toString () {
