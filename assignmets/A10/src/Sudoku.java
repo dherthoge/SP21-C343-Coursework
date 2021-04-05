@@ -71,11 +71,11 @@ class Sudoku {
                 // column
                 if (isValid(val, row, col)) {
                     cells[col][row] = val;
-                    if (row < 8) {
+                    if (row < dim - 1) {
                         boolean solved = tryCell(col, row + 1);
                         if (solved) return solved;
                     }
-                    else if (col < 8) {
+                    else if (col < dim - 1) {
                         boolean solved = tryCell(col + 1, 0);
                         if (solved) return solved;
                     }
@@ -87,11 +87,11 @@ class Sudoku {
             }
         } else {
 
-            if (row < 8) {
+            if (row < dim - 1) {
                 boolean solved = tryCell(col, row + 1);
                 if (solved) return solved;
             }
-            else if (col < 8) {
+            else if (col < dim - 1) {
                 boolean solved = tryCell(col + 1, 0);
                 if (solved) return solved;
             }
