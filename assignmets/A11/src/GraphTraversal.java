@@ -9,11 +9,13 @@ abstract class GraphTraversal {
         this.neighbors = neighbors;
     }
 
+    // Good
     void traverse(Consumer<Node> consumer) {
         while (!nodesToTraverse.isEmpty())
             visit(nodesToTraverse.extract(), consumer);
     }
 
+    // Good
     void visit(Node u, Consumer<Node> consumer) {
         if (u.isNotVisited()) {
             u.setVisited();
@@ -22,21 +24,26 @@ abstract class GraphTraversal {
         }
     }
 
+    // Good
     abstract void relax(Edge e);
 }
 
 // ----------------------------------------------------------------------
 
 class BFS extends GraphTraversal {
+
+    // Good
     BFS(Hashtable<Node, ArrayList<Edge>> neighbors) {
         super(neighbors);
         nodesToTraverse = new QUEUE_COLL();
     }
 
+    // Good
     void relax(Edge e) {
         nodesToTraverse.insert(e.getDestination());
     }
 
+    // Good
     List<Node> startFrom(Node s) {
         List<Node> result = new ArrayList<>();
         nodesToTraverse.insert(s);
@@ -48,15 +55,19 @@ class BFS extends GraphTraversal {
 // ----------------------------------------------------------------------
 
 class DFS extends GraphTraversal {
+
+    // Good
     DFS(Hashtable<Node, ArrayList<Edge>> neighbors) {
         super(neighbors);
         nodesToTraverse = new STACK_COLL();
     }
 
+    // Good
     void relax(Edge e) {
         nodesToTraverse.insert(e.getDestination());
     }
 
+    // Good
     List<Node> startFrom(Node s) {
         List<Node> result = new ArrayList<>();
         nodesToTraverse.insert(s);
@@ -94,7 +105,7 @@ class TopologicalSort extends GraphTraversal {
 
 // ----------------------------------------------------------------------
 
-class ShortestPaths extends GraphTraversal {
+class ShortestPaths extends GraphTraversal  {
     ShortestPaths(Hashtable<Node, ArrayList<Edge>> neighbors) {
         super(neighbors);
         Set<Node> nodes = neighbors.keySet();
@@ -102,14 +113,21 @@ class ShortestPaths extends GraphTraversal {
         nodesToTraverse = new HEAP_COLL(nodes);
     }
 
+    // Dijkstra's edge weight added to the destination's "weight" (in this case "value"
     void relax(Edge e) {
-        return;
+        Node source = e.getSource();
+        Node destination = e.getDestination();
+
+        // In the case that there are nodes that are unreachable from the source node, we need to
+        // check that the value of the source not is not MAX_VALUE
+        if (destination.getValue() > source.getValue()+e.getWeight() && source.getValue() != Integer.MAX_VALUE) {
+            destination.setValue(source.getValue() + e.getWeight());
+        }
     }
 
     void fromSource(Node source) {
         source.updateValue(i -> 0);
-        traverse(node -> {
-        });
+        traverse(node -> {});
     }
 }
 
