@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.function.Function;
 
 class Node implements Comparable<Node> {
@@ -58,8 +59,18 @@ class Node implements Comparable<Node> {
      * current previousEdge
      */
     ArrayList<Edge> followPreviousEdge () {
-        // TODO
-        throw new Error("TODO");
+
+        ArrayList<Edge> path = new ArrayList<>();
+
+        Node currentNode = this;
+        while (currentNode.getPreviousEdge() != null) {
+            Edge previousEdge = currentNode.getPreviousEdge();
+            path.add(previousEdge);
+            currentNode = previousEdge.getSource();
+        }
+
+        Collections.reverse(path);
+        return path;
     }
 
     public int compareTo(Node o) {

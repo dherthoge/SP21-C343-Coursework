@@ -26,8 +26,7 @@ class GraphTraversalTest {
         neighbors.put(e, new ArrayList<>(Collections.emptyList()));
     }
 
-    @Test
-    public void bfs () {
+    @Test public void bfs () {
         simpleGraph();
         BFS g = new BFS(neighbors);
         List<Node> bfsTraversal = g.startFrom(start);
@@ -295,6 +294,7 @@ class GraphTraversalTest {
 
         ArrayList<Edge> path = graph.fromSourceToDestination(s,t);
         assertEquals(4,path.size());
+
         assertEquals(sa,path.get(0));
         assertEquals(ac,path.get(1));
         assertEquals(cf,path.get(2));
